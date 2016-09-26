@@ -1,0 +1,27 @@
++=========+
+| Todo:   |
++=========+
+
+
+JSON Reader:
+Assigned to: Amber and Sam
+Description:
+	1. Retrieve matches1.json from the Riot API's getting started page.
+	2. Parse the json file to see what fields are avialable
+	3. Write a java program that takes in the json, and converts it into a json object. There may be existing libraries that do this, so do some digging around.
+	4. Output the json into a .csv file for easier viewing. I'll leave it up to you guys to discuss formatting for the file. Remember that each matches*.json file contains 100 games.
+
+Basic Regression Model:
+Assigned to: Wilson and Nicholas
+Description:
+	1. Create the barebones java program that will perform our linear regression. There may be code online that may help us with this.
+	2. There should be at least three methods: one for reading/constructing the data values; one for performing the actual regression; and one method to coordinate everything.
+		a. The main task is to flesh out the regression method, but you guys should also prepare some tests to make sure the code is working.
+		b. It's inputs should be the set of data points, and it should print out (to console or file) the coefficients for each variable.
+
+Correlation Plot:
+Assigned to: Justin
+Description:
+	1. Write a java program that will take in two sets of data and
+		a. Make a figure to plot them
+		b. Calculate and output the coefficient of correlation between the two variables.
