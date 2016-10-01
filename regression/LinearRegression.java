@@ -1,9 +1,17 @@
 public class LinearRegression {
 
 	public LinearRegression() {
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Performs matrix multiplication with the two matrix in parameter.
+	 * 
+	 * @param matrix1
+	 *            The left matrix in the matrix multiplication.
+	 * @param matrix2
+	 *            The right matrix in the matrix multiplication.
+	 * @return The resultant matrix of multiplication.
+	 */
 	public static double[][] multiply(double[][] matrix1, double[][] matrix2) {
 		int c, d, k = 0;
 		double sum = 0;
@@ -36,11 +44,19 @@ public class LinearRegression {
 		}
 		return multiply;
 	}
-	public static void printMatrix(double[][] a){
+
+	/**
+	 * Prints a matrix
+	 * 
+	 * @param a
+	 *            The matrix to be printed
+	 */
+	public static void printMatrix(double[][] a) {
 		for (int i = 0; i < a.length; i++) {
 			for (int j = 0; j < a[0].length; j++)
 				System.out.print(a[i][j] + "\t");
 			System.out.print("\n");
 		}
+		System.out.println();
 	}
 }
