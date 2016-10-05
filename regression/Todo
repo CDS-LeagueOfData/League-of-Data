@@ -8,7 +8,9 @@ Amber, Sam, Justin:
 Work:
 	1. Redesign your code so that it is an object class, with its constructor taking in a filepath to read from.
 	2. Write individual methods that extract certain values from the array (for now: kills, deaths, assists, cs, gold)
-	3. Write a method called getValues() that returns a double[][] containing the values of kills, death, etc. It should utilize the methods you wrote for (2) that way we can easily add in/switch out what we think is important. Don't forget the initial column of 1 for our intercept.
+	3. Write a method called getValues() that returns a double[][] containing the values of kills, death, etc. 
+	It should utilize the methods you wrote for (2) that way we can easily add in/switch out what we think is important. 
+	Don't forget the initial column of 1 for our intercept.
 
 Wilson, Nicholas:
 	1. Write code to implement transpose and inverse. (math on wiki)
