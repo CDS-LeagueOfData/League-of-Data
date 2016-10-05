@@ -23,17 +23,42 @@ import com.google.gson.stream.JsonReader;
 
 public class ParseJson {
     private static String pathName;
+    private static String[] inputVars;
     
-    /** Constructor: initialize file path name. */
-    public ParseJson(String pN) {
+    /** Constructor: initialize file path name (String) and
+     * .input variables (String[])
+     * @param pN
+     * @param iVs
+     */
+    public ParseJson(String pN, String[] iVs) {
         pathName= pN;
+        inputVars= iVs;
     }
     
-    /** The path name. */
-    public String pathName() {
+    /** 
+     * @return path name
+     */
+    public String getPathName() {
         return pathName;
     }
     
+    /** Set path name 
+     * @param pN
+     */
+    public void setPathName(String pN) {
+        pathName = pN;
+    }
+    
+    /** 
+     * @return input variables
+     */
+    public String[] getInputVars() {
+        return inputVars;
+    }
+    
+    public void setInputVars(String[] iVs) {
+        inputVars = iVs;
+    }
     //*********** JUST ME TESTING CODE THIS WILL NOT BE IN FINAL CLASS FILE **********////
     public static void main(String[] args) {
 //        try {
@@ -50,7 +75,8 @@ public class ParseJson {
 //              matchesArray.add((JsonObject) matches.get(matchIndex));
 //              System.out.println(matchesArray.get(matchIndex));
 //          }
-            ParseJson pj = new ParseJson("/Users/samdickerman/Downloads/noTimeline.json");
+            String[] input = {"minionsKilled", "kills", "deaths", "assists"};
+            ParseJson pj = new ParseJson("/Users/samdickerman/Downloads/noTimeline.json", input);
             ArrayList<JsonObject> matches = pj.getMatchesArrayFromJson();
             JsonObject game1 = getGame(matches, 0);
             JsonArray participants = game1.getAsJsonArray("participants");
@@ -77,6 +103,10 @@ public class ParseJson {
             
             ArrayList<Integer> statArray = getArrayOfStat(game1, "minionsKilled");
             System.out.println(Arrays.toString(statArray.toArray()));
+            
+            //String[] myStatArray = {"minionsKilled", "kills", "deaths", "assists"};
+            double[][] myMatrix = getValues(game1);
+            printMatrix(myMatrix);
 
     }
     /** 
@@ -202,16 +232,24 @@ public class ParseJson {
     }
     
     /** Return 2D Matrix where the rows are the stats while the columns are each players respective stat value */
-    public static double[][] getValues(JsonObject game, ArrayList<String> stats) {
-        double[][] valueMatrix = new double[stats.size()][10];
-        for (int statIndex = 0; statIndex < stats.size(); statIndex++) {
+    public static double[][] getValues(JsonObject game) {
+        double[][] valueMatrix = new double[inputVars.length][10];
+        for (int statIndex = 0; statIndex < inputVars.length; statIndex++) {
             for (int playerIndex = 0; playerIndex < 10; playerIndex++) {
-                String stat = stats.get(statIndex); 
+                String stat = inputVars[statIndex]; 
                 int statValue = getAStatFromGame(game, playerIndex, stat);
                 valueMatrix[statIndex][playerIndex] = (double) statValue;
             }
         }
         return valueMatrix;
+    }
+    
+    static void printMatrix(double[][] grid) {
+        for(int r=0; r<grid.length; r++) {
+           for(int c=0; c<grid[r].length; c++)
+               System.out.print(grid[r][c] + " ");
+           System.out.println();
+        }
     }
     
     
