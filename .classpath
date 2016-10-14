@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="regression"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/haonanchen/Documents/Coding/Eclipse/League-of-Data/commons-math3-3.6.1.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
