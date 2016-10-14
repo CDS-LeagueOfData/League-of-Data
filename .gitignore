@@ -1,3 +1,4 @@
 matches*.json
 .class
 *.class
+/bin/
