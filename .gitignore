@@ -2,3 +2,5 @@ matches*.json
 .class
 *.class
 /bin/
+.classpath
+.project
