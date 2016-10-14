@@ -1,8 +1,18 @@
-package Matrix;
 
 import org.apache.commons.math3.linear.*;
 
+import com.google.gson.JsonObject;
+
 public class LinearRegression {
+
+	public static double[][] approximateRatingCoef(JsonObject game, double[] rating) {
+		RealMatrix A = new Array2DRowRealMatrix(ParseJson.getValues(game));
+		RealMatrix B = A.createMatrix(A.getRowDimension(), 1);
+		for (int i = 0; i < rating.length; i++) {
+			B.addToEntry(i, 1, rating[i]);
+		}
+		return findCoef(A,B);
+	}
 
 	/**
 	 * Perform regression on an independent variable data and dependent variable
