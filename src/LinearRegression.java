@@ -1,4 +1,5 @@
 
+
 import org.apache.commons.math3.linear.*;
 
 import com.google.gson.JsonObject;
@@ -29,5 +30,14 @@ public class LinearRegression {
 		RealMatrix At = A.transpose();
 		RealMatrix AtA = A.transpose().multiply(A);
 		return MatrixUtils.inverse(AtA).multiply(At).multiply(B).getData();
+	}
+	
+	public static void printMatrix(double[][] m){
+		for(int i=0;i<m.length;i++){
+			for(int j=0;j<m[0].length;i++){
+				System.out.println(m[i][j]+" ");
+			}
+			System.out.println();
+		}
 	}
 }
