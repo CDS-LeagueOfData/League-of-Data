@@ -1,0 +1,83 @@
+{
+  "teamId": 100,
+  "spell1Id": 4,
+  "spell2Id": 12,
+  "championId": 134,
+  "highestAchievedSeasonTier": "SILVER",
+  "timeline": {
+    "creepsPerMinDeltas": {
+      "zeroToTen": 2.5
+    },
+    "xpPerMinDeltas": {
+      "zeroToTen": 456.6
+    },
+    "goldPerMinDeltas": {
+      "zeroToTen": 659.8
+    },
+    "damageTakenPerMinDeltas": {
+      "zeroToTen": 535.7
+    },
+    "role": "DUO_SUPPORT",
+    "lane": "TOP"
+  },
+  "stats": {
+    "winner": true,
+    "champLevel": 17,
+    "item0": 2031,
+    "item1": 3020,
+    "item2": 3285,
+    "item3": 3089,
+    "item4": 1056,
+    "item5": 3001,
+    "item6": 3340,
+    "kills": 12,
+    "doubleKills": 2,
+    "tripleKills": 0,
+    "quadraKills": 0,
+    "pentaKills": 0,
+    "unrealKills": 0,
+    "largestKillingSpree": 5,
+    "deaths": 5,
+    "assists": 14,
+    "totalDamageDealt": 100619,
+    "totalDamageDealtToChampions": 36544,
+    "totalDamageTaken": 15223,
+    "largestCriticalStrike": 0,
+    "totalHeal": 679,
+    "minionsKilled": 68,
+    "neutralMinionsKilled": 7,
+    "neutralMinionsKilledTeamJungle": 0,
+    "neutralMinionsKilledEnemyJungle": 7,
+    "goldEarned": 14782,
+    "goldSpent": 11500,
+    "combatPlayerScore": 0,
+    "objectivePlayerScore": 0,
+    "totalPlayerScore": 0,
+    "totalScoreRank": 0,
+    "magicDamageDealtToChampions": 35742,
+    "physicalDamageDealtToChampions": 616,
+    "trueDamageDealtToChampions": 186,
+    "visionWardsBoughtInGame": 0,
+    "sightWardsBoughtInGame": 0,
+    "magicDamageDealt": 96485,
+    "physicalDamageDealt": 3645,
+    "trueDamageDealt": 488,
+    "magicDamageTaken": 9259,
+    "physicalDamageTaken": 5637,
+    "trueDamageTaken": 326,
+    "firstBloodKill": false,
+    "firstBloodAssist": false,
+    "firstTowerKill": false,
+    "firstTowerAssist": true,
+    "firstInhibitorKill": false,
+    "firstInhibitorAssist": true,
+    "inhibitorKills": 0,
+    "towerKills": 0,
+    "wardsPlaced": 16,
+    "wardsKilled": 0,
+    "largestMultiKill": 2,
+    "killingSprees": 4,
+    "totalUnitsHealed": 1,
+    "totalTimeCrowdControlDealt": 518
+  }
+}
