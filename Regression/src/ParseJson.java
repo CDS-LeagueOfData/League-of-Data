@@ -6,18 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import com.google.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
     
 
@@ -60,6 +53,7 @@ public class ParseJson {
     public void setInputVars(String[] iVs) {
         inputVars = iVs;
     }
+    
     //*********** JUST ME TESTING CODE THIS WILL NOT BE IN FINAL CLASS FILE **********////
     public static void main(String[] args) {
 //        try {
