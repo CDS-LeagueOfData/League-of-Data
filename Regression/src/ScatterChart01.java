@@ -1,9 +1,7 @@
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
@@ -87,7 +85,6 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 		return chart;
 	}
 
-	@Override
 	public XYChart getChart() {
 		// TODO Auto-generated method stub
 		return null;
