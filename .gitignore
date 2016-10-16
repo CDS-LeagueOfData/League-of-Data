@@ -3,4 +3,3 @@ matches*.json
 *.class
 /bin/
 .classpath
-.project
