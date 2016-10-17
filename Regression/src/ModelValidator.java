@@ -25,7 +25,7 @@ public class ModelValidator {
 			int testSetInd = 0;
 			int trainingSetInd = 0;
 			for (int i = 0; i < files.length; i++) {
-				if ((i + iteration) % n == 0) {
+				if ((i + iteration) % n == 0 && testSetInd<testSet.length) {
 					testSet[testSetInd] = files[i];
 					testSetInd++;
 				} else {
