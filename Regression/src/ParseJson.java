@@ -256,27 +256,6 @@ public class ParseJson {
            System.out.println();
         }
     }
-     
-    public static int convertToRating(String grade) {
-    	int rating = 0;
-    	String[] grades = new String[]{"D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"};
-    	for (int k = 0; k < grades.length; k++) {
-    		if (grades[k].equals(grade)){
-    			rating = k + 1;
-    		}
-    	}
-    	return rating;
-    }
-    
-    public static int[] getRatings(){
-		int[] ratings = new int[gameFiles.length];
-		for (int k = 0; k < gameFiles.length; k++) {
-			JsonObject stats = getStatsFromCleanJson(gameFiles[k]);
-			String letter = stats.get("rating").getAsString();
-			ratings[k] = convertToRating(letter);
-		}
-		return ratings;
-    }
     
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// CLEAN GAME FUNCTIONS/////////////////////////////////////
@@ -301,6 +280,39 @@ public class ParseJson {
     	return null;
     }
     
+    public static double[][] getValues() {
+        double[][] valueMatrix = new double[gameFiles.length][inputVars.length];
+        for (int gameIndex = 0; gameIndex < gameFiles.length; gameIndex++) {
+        	JsonObject stat = getStatsFromCleanJson(gameFiles[gameIndex]);
+            for (int varIndex = 0; varIndex < inputVars.length; varIndex++) {
+                String var = inputVars[varIndex]; 
+                int value = stat.get(var).getAsInt();
+                valueMatrix[gameIndex][varIndex] = (double) value;
+            }
+        }
+        return valueMatrix;
+    }
+    
+    public static double convertToRating(String grade) {
+    	double rating = 0;
+    	String[] grades = new String[]{"D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"};
+    	for (int k = 0; k < grades.length; k++) {
+    		if (grades[k].equals(grade)){
+    			rating = k + 1;
+    		}
+    	}
+    	return rating;
+    }
+    
+    public static double[] getRatings(){
+		double[] ratings = new double[gameFiles.length];
+		for (int k = 0; k < gameFiles.length; k++) {
+			JsonObject stats = getStatsFromCleanJson(gameFiles[k]);
+			String letter = stats.get("rating").getAsString();
+			ratings[k] = convertToRating(letter);
+		}
+		return ratings;
+    }
 }
 
 
