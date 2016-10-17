@@ -81,7 +81,7 @@ public class ParseJson {
 //              System.out.println(matchesArray.get(matchIndex));
 //          }
             String[] input = {"minionsKilled", "kills", "deaths", "assists"};
-            ParseJson pj = new ParseJson("/Users/Amber/Downloads/matches1.json", input);
+            ParseJson pj = new ParseJson("/Users/samdickerman/Downloads/matches1.json", input);
             ArrayList<JsonObject> matches = pj.getMatchesArrayFromJson();
             JsonObject game1 = getGame(matches, 0);
             JsonArray participants = game1.getAsJsonArray("participants");
@@ -112,6 +112,21 @@ public class ParseJson {
             //String[] myStatArray = {"minionsKilled", "kills", "deaths", "assists"};
             double[][] myMatrix = getValues(game1);
             printMatrix(myMatrix);
+            
+            
+            String[] inputClean = {"kills", "deaths", "assists", "goldEarned", "minionsKilled"};
+            String dataPath = "/Users/samdickerman/Documents/CDS/League-of-Data/Regression/data/clean/";
+            String[] fileNames = new String[] {dataPath + "sam-clean-1.json",dataPath + "sam-clean-2.json",dataPath + "sam-clean-3.json",dataPath + "sam-clean-4.json",};
+            
+            System.out.println("VALUES");
+            ParseJson pjClean = new ParseJson(fileNames, inputClean);
+            double [][] a =pjClean.getValues();
+            printMatrix(a);
+            
+            System.out.println("RATINGS");
+            for (int j = 0; j< gameFiles.length; j++) {
+            	System.out.println(pjClean.getRatings()[j]);
+            }
     }
     /** 
      * @return array list of matches from json file.
@@ -280,7 +295,7 @@ public class ParseJson {
     	return null;
     }
     
-    public static double[][] getValues() {
+    public double[][] getValues() {
         double[][] valueMatrix = new double[gameFiles.length][inputVars.length];
         for (int gameIndex = 0; gameIndex < gameFiles.length; gameIndex++) {
         	JsonObject stat = getStatsFromCleanJson(gameFiles[gameIndex]);
@@ -304,7 +319,7 @@ public class ParseJson {
     	return rating;
     }
     
-    public static double[] getRatings(){
+    public double[] getRatings(){
 		double[] ratings = new double[gameFiles.length];
 		for (int k = 0; k < gameFiles.length; k++) {
 			JsonObject stats = getStatsFromCleanJson(gameFiles[k]);
