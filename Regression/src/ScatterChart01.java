@@ -23,8 +23,8 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 				path + "/david-clean-2.json", 
 				path + "/david-clean-3.json", 
 				path + "/david-clean-4.json",
-//				path + "/david-clean-5.json" 
-//				path + "/david-clean-6.json", 
+				path + "/david-clean-5.json", 
+				path + "/david-clean-6.json", 
 				path + "/david-clean-7.json", 
 				path + "/david-clean-8.json", 
 				path + "/david-clean-9.json",
@@ -34,11 +34,13 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 				path + "/sam-clean-4.json", 
 				path + "/wilson-clean-1.json"
 				};
+		
 		ParseJson parsey = new ParseJson(files, inputClean);
 		double[][] a1 =  parsey.getValues();
 		System.out.println("VALUES");
 		ParseJson.printMatrix(a1);
 		System.out.println(a1);
+		
 //		double[] b1 = parsey.getRatings();
 //		System.out.println("RATINGS");
 //		for (int k = 0; k < files.length; k++) {				
@@ -56,12 +58,12 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 		System.out.println(xData);
 		System.out.println(yData);
 
-		display(xData, yData);
+		display("Kills vs Deaths",xData, yData);
 	}
 
-	public static void display(List a, List b) {
+	public static void display(String name, List a, List b) {
 		ExampleChart<XYChart> exampleChart = new ScatterChart01();
-		XYChart chart = ((ScatterChart01) exampleChart).plotScatter(a, b);
+		XYChart chart = ((ScatterChart01) exampleChart).plotScatter(name, a, b);
 		new SwingWrapper<XYChart>(chart).displayChart();
 		System.out.println(calcCorrelation(a, b));
 	}
@@ -98,10 +100,10 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 
 	}
 
-	public XYChart plotScatter(List a, List b) {
+	public XYChart plotScatter(String name, List a, List b) {
 
 		// Create Chart
-		XYChart chart = new XYChartBuilder().width(1000).height(800).title("League of Data").build();
+		XYChart chart = new XYChartBuilder().width(1000).height(800).title(name).build();
 
 		// Customize Chart
 		chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Scatter);
