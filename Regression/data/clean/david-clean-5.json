@@ -1,15 +1,97 @@
 {
+   "matchId": 2230492162,
    "region": "NA",
+   "platformId": "NA1",
+   "matchMode": "CLASSIC",
    "matchType": "MATCHED_GAME",
    "matchCreation": 1467394008192,
+   "matchDuration": 1215,
+   "queueType": "TEAM_BUILDER_DRAFT_RANKED_5x5",
    "mapId": 11,
    "season": "SEASON2016",
-   "queueType": "TEAM_BUILDER_DRAFT_RANKED_5x5",
-   "matchId": 2230492162,
-   "matchDuration": 1215,
+   "matchVersion": "6.13.148.7588",
    "rating": "S",
    "player": {
-   "stats": { 
+         "teamId": 100,
+         "spell1Id": 4,
+         "spell2Id": 7,
+         "championId": 236,
+         "highestAchievedSeasonTier": "SILVER",
+         "timeline": {
+            "creepsPerMinDeltas": {
+               "zeroToTen": 3.3,
+               "tenToTwenty": 5.1
+            },
+            "xpPerMinDeltas": {
+               "zeroToTen": 214.2,
+               "tenToTwenty": 369.3
+            },
+            "goldPerMinDeltas": {
+               "zeroToTen": 311.5,
+               "tenToTwenty": 492.6
+            },
+            "csDiffPerMinDeltas": {
+               "zeroToTen": -0.7499999999999999,
+               "tenToTwenty": 0.6000000000000001
+            },
+            "xpDiffPerMinDeltas": {
+               "zeroToTen": 27.400000000000006,
+               "tenToTwenty": 3.4000000000000057
+            },
+            "damageTakenPerMinDeltas": {
+               "zeroToTen": 417.1,
+               "tenToTwenty": 561.5
+            },
+            "damageTakenDiffPerMinDeltas": {
+               "zeroToTen": -177.65000000000003,
+               "tenToTwenty": -66.80000000000001
+            },
+            "role": "DUO_CARRY",
+            "lane": "BOTTOM"
+         },
+         "masteries": [
+            {
+               "rank": 5,
+               "masteryId": 6114
+            },
+            {
+               "rank": 1,
+               "masteryId": 6123
+            },
+            {
+               "rank": 5,
+               "masteryId": 6134
+            },
+            {
+               "rank": 1,
+               "masteryId": 6142
+            },
+            {
+               "rank": 5,
+               "masteryId": 6311
+            },
+            {
+               "rank": 1,
+               "masteryId": 6322
+            },
+            {
+               "rank": 5,
+               "masteryId": 6332
+            },
+            {
+               "rank": 1,
+               "masteryId": 6342
+            },
+            {
+               "rank": 5,
+               "masteryId": 6352
+            },
+            {
+               "rank": 1,
+               "masteryId": 6362
+            }
+         ],
+         "stats": { 
             "rating": "S",
             "unrealKills": 0,
             "item2": 3157,
