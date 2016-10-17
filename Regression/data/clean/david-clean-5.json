@@ -49,48 +49,6 @@
             "role": "DUO_CARRY",
             "lane": "BOTTOM"
          },
-         "masteries": [
-            {
-               "rank": 5,
-               "masteryId": 6114
-            },
-            {
-               "rank": 1,
-               "masteryId": 6123
-            },
-            {
-               "rank": 5,
-               "masteryId": 6134
-            },
-            {
-               "rank": 1,
-               "masteryId": 6142
-            },
-            {
-               "rank": 5,
-               "masteryId": 6311
-            },
-            {
-               "rank": 1,
-               "masteryId": 6322
-            },
-            {
-               "rank": 5,
-               "masteryId": 6332
-            },
-            {
-               "rank": 1,
-               "masteryId": 6342
-            },
-            {
-               "rank": 5,
-               "masteryId": 6352
-            },
-            {
-               "rank": 1,
-               "masteryId": 6362
-            }
-         ],
          "stats": { 
             "rating": "S",
             "unrealKills": 0,
