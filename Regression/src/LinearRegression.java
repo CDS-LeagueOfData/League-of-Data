@@ -7,26 +7,18 @@ import com.google.gson.JsonObject;
 public class LinearRegression {
 	
 	public static double[][] predict(double[][] values, double[][] coeff){
-
+		values = addOne(values);
 		RealMatrix A = new Array2DRowRealMatrix(values);
 		RealMatrix x = new Array2DRowRealMatrix(coeff);
 		return A.multiply(x).getData();
 	}
 	
 	public static double[][] approximateRatingCoef(double[][] values, double[] rating) {
+		values = addOne(values);
 		RealMatrix A = new Array2DRowRealMatrix(values);
 		RealMatrix B = A.createMatrix(A.getRowDimension(), 1);
 		for (int i = 0; i < rating.length; i++) {
-			B.addToEntry(i, 1, rating[i]);
-		}
-		return findCoef(A,B);
-	}
-	
-	public static double[][] approximateRatingCoef(JsonObject game, double[] rating) {
-		RealMatrix A = new Array2DRowRealMatrix(ParseJson.getValues(game));
-		RealMatrix B = A.createMatrix(A.getRowDimension(), 1);
-		for (int i = 0; i < rating.length; i++) {
-			B.addToEntry(i, 1, rating[i]);
+			B.addToEntry(i, 0, rating[i]);
 		}
 		return findCoef(A,B);
 	}
@@ -55,5 +47,16 @@ public class LinearRegression {
 			}
 			System.out.println();
 		}
+	}
+	private static double[][] addOne(double[][] values){
+		for(int i=0;i<values.length;i++){
+			double[] addOne = new double[values[i].length+1];
+			addOne[0] = 1;
+			for(int j=0;j<values[i].length;j++){
+				addOne[j+1] = values[i][j]; 
+			}
+			values[i] = addOne;
+		}
+		return values;
 	}
 }
