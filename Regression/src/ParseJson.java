@@ -18,6 +18,7 @@ import com.google.gson.stream.JsonReader;
 public class ParseJson {
     private static String pathName;
     private static String[] inputVars;
+    private static String[] gameFiles;
     
     /** Constructor: initialize file path name (String) and
      * .input variables (String[])
@@ -27,6 +28,15 @@ public class ParseJson {
     public ParseJson(String pN, String[] iVs) {
         pathName= pN;
         inputVars= iVs;
+    }
+    
+    /** Constructor: initializes String array to hold multiple games and
+     *  input variables (String[])
+     * @param iVs
+     */
+    public ParseJson(String[] fileNames, String[] iVs) {
+    	gameFiles = fileNames;
+    	inputVars = iVs;
     }
     
     /** 
@@ -71,7 +81,7 @@ public class ParseJson {
 //              System.out.println(matchesArray.get(matchIndex));
 //          }
             String[] input = {"minionsKilled", "kills", "deaths", "assists"};
-            ParseJson pj = new ParseJson("/Users/samdickerman/Downloads/noTimeline.json", input);
+            ParseJson pj = new ParseJson("/Users/Amber/Downloads/matches1.json", input);
             ArrayList<JsonObject> matches = pj.getMatchesArrayFromJson();
             JsonObject game1 = getGame(matches, 0);
             JsonArray participants = game1.getAsJsonArray("participants");
@@ -102,7 +112,6 @@ public class ParseJson {
             //String[] myStatArray = {"minionsKilled", "kills", "deaths", "assists"};
             double[][] myMatrix = getValues(game1);
             printMatrix(myMatrix);
-
     }
     /** 
      * @return array list of matches from json file.
@@ -247,11 +256,32 @@ public class ParseJson {
            System.out.println();
         }
     }
+     
+    public static int convertToRating(String grade) {
+    	int rating = 0;
+    	String[] grades = new String[]{"D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"};
+    	for (int k = 0; k < grades.length; k++) {
+    		if (grades[k].equals(grade)){
+    			rating = k + 1;
+    		}
+    	}
+    	return rating;
+    }
+    
+    public static int[] getRatings(){
+		int[] ratings = new int[gameFiles.length];
+		for (int k = 0; k < gameFiles.length; k++) {
+			JsonObject stats = getStatsFromCleanJson(gameFiles[k]);
+			String letter = stats.get("rating").getAsString();
+			ratings[k] = convertToRating(letter);
+		}
+		return ratings;
+    }
     
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// CLEAN GAME FUNCTIONS/////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
-    public JsonObject getStatsFromCleanJson(String pN) {
+    public static JsonObject getStatsFromCleanJson(String pN) {
     	try {
     		FileReader file = new FileReader(pN);
     		JsonReader jsonReader = new JsonReader(file);
