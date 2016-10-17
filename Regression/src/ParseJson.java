@@ -132,6 +132,7 @@ public class ParseJson {
         
     }
     
+
     /** 
      * @param matchesArray
      * @param index
@@ -247,6 +248,28 @@ public class ParseJson {
         }
     }
     
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////// CLEAN GAME FUNCTIONS/////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
+    public JsonObject getStatsFromCleanJson(String pN) {
+    	try {
+    		FileReader file = new FileReader(pN);
+    		JsonReader jsonReader = new JsonReader(file);
+    		// Convert to a JSON object to print data
+    		JsonParser jp = new JsonParser(); //from gson
+    		JsonElement root = jp.parse(jsonReader);
+    		JsonObject cleanGame = root.getAsJsonObject();
+    		return (JsonObject) cleanGame.getAsJsonObject("player").get("stats");
+    	}
+    	catch (FileNotFoundException ex) {
+    		ex.printStackTrace();
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+    	} catch (NullPointerException ex) {
+    		ex.printStackTrace();
+    	} 
+    	return null;
+    }
     
 }
 
