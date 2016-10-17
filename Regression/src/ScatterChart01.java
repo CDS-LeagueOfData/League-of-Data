@@ -51,14 +51,17 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 		List<Double> xData = new LinkedList<Double>();
 		List<Double> yData = new LinkedList<Double>();
 		
+		int varOne = 3;
+		int varTwo = 4;
+		
 		for(int i = 0;i<a1.length;i++){
-			xData.add(a1[i][0]);
-			yData.add(a1[i][1]);
+			xData.add(a1[i][varOne]);
+			yData.add(a1[i][varTwo]);
 		}
 		System.out.println(xData);
 		System.out.println(yData);
 
-		display("Kills vs Deaths",xData, yData);
+		display(inputClean[varOne]+" vs "+inputClean[varTwo],xData, yData);
 	}
 
 	public static void display(String name, List a, List b) {

@@ -1,1 +1,10 @@
 kills_vs_deaths: 0.24683250322872055
+kills_vs_assists: -0.32980636782098205
+kills_vs_goldearned: 0.8437257924261506
+kills_vs_minionskilled: 0.7692487987017526
+deaths_vs_assists: -0.031799059111899994
+deaths_vs_goldearned: 0.44732979760443964
+deaths_vs_minionskilled: 0.08464157784714116
+assists_vs_goldearned: 0.07686071345347027
+assists_vs_minionskilled: -0.38417145993346885
+goldearned_vs_minionskilled: 0.6250314929980672
