@@ -5,7 +5,23 @@ import org.apache.commons.math3.linear.*;
 import com.google.gson.JsonObject;
 
 public class LinearRegression {
+	
+	public static double[][] predict(double[][] values, double[][] coeff){
 
+		RealMatrix A = new Array2DRowRealMatrix(values);
+		RealMatrix x = new Array2DRowRealMatrix(coeff);
+		return A.multiply(x).getData();
+	}
+	
+	public static double[][] approximateRatingCoef(double[][] values, double[] rating) {
+		RealMatrix A = new Array2DRowRealMatrix(values);
+		RealMatrix B = A.createMatrix(A.getRowDimension(), 1);
+		for (int i = 0; i < rating.length; i++) {
+			B.addToEntry(i, 1, rating[i]);
+		}
+		return findCoef(A,B);
+	}
+	
 	public static double[][] approximateRatingCoef(JsonObject game, double[] rating) {
 		RealMatrix A = new Array2DRowRealMatrix(ParseJson.getValues(game));
 		RealMatrix B = A.createMatrix(A.getRowDimension(), 1);
