@@ -10,7 +10,7 @@ public class ModelValidator {
 
 		for (int n = 2; n < files.length; n++) {
 			double res = nFold(n, files, params);
-			System.out.println(n + "-fold validation: " + res);
+			System.out.println(n + "-fold validation: " + Math.round(res*100)/100.0);
 		}
 	}
 
