@@ -112,7 +112,23 @@ public class ParseJson {
             //String[] myStatArray = {"minionsKilled", "kills", "deaths", "assists"};
             double[][] myMatrix = getValues(game1);
             printMatrix(myMatrix);
+            
+            // TESTING CLEANJSON METHODS
+            String path = "/Users/Amber/Documents/Cornell/CDSLeague/League-of-Data/Regression/data/clean";
+            String[] files = new String[] {path + "/amber-clean-1.json", path + "/amber-clean-2.json"};
+            ParseJson parsey = new ParseJson(files, input);
+            
+            double[][] a = parsey.getValues();
+            System.out.println("VALUES");
+            printMatrix(a);
+            
+            double[] b = parsey.getRatings();
+            System.out.println("RATINGS");
+            for (int k = 0; k < gameFiles.length; k++) {
+            	System.out.println(b[k]);
+            }
     }
+    
     /** 
      * @return array list of matches from json file.
      */
@@ -280,7 +296,7 @@ public class ParseJson {
     	return null;
     }
     
-    public static double[][] getValues() {
+    public double[][] getValues() {
         double[][] valueMatrix = new double[gameFiles.length][inputVars.length];
         for (int gameIndex = 0; gameIndex < gameFiles.length; gameIndex++) {
         	JsonObject stat = getStatsFromCleanJson(gameFiles[gameIndex]);
@@ -304,7 +320,7 @@ public class ParseJson {
     	return rating;
     }
     
-    public static double[] getRatings(){
+    public double[] getRatings(){
 		double[] ratings = new double[gameFiles.length];
 		for (int k = 0; k < gameFiles.length; k++) {
 			JsonObject stats = getStatsFromCleanJson(gameFiles[k]);
