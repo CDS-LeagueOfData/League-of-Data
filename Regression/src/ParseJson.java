@@ -112,8 +112,6 @@ public class ParseJson {
             //String[] myStatArray = {"minionsKilled", "kills", "deaths", "assists"};
             double[][] myMatrix = getValues(game1);
             printMatrix(myMatrix);
-
-            System.out.println(getRating("S+"));
     }
     /** 
      * @return array list of matches from json file.
@@ -259,7 +257,7 @@ public class ParseJson {
         }
     }
      
-    public static int getRating(String grade) {
+    public static int convertToRating(String grade) {
     	int rating = 0;
     	String[] grades = new String[]{"D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"};
     	for (int k = 0; k < grades.length; k++) {
@@ -272,9 +270,10 @@ public class ParseJson {
     
     public static int[] getRatings(){
 		int[] ratings = new int[gameFiles.length];
-		JsonObject[] gameStatObjects = new JsonObject[gameFiles.length];
 		for (int k = 0; k < gameFiles.length; k++) {
-			
+			JsonObject stats = getStatsFromCleanJson(gameFiles[k]);
+			String letter = stats.get("rating").getAsString();
+			ratings[k] = convertToRating(letter);
 		}
 		return ratings;
     }
@@ -282,7 +281,7 @@ public class ParseJson {
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// CLEAN GAME FUNCTIONS/////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
-    public JsonObject getStatsFromCleanJson(String pN) {
+    public static JsonObject getStatsFromCleanJson(String pN) {
     	try {
     		FileReader file = new FileReader(pN);
     		JsonReader jsonReader = new JsonReader(file);
