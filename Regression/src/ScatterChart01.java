@@ -1,5 +1,5 @@
 
-import java.util.Arrays;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 	public static void main(String[] args) {
 		String[] inputClean = {"kills", "deaths", "assists", "goldEarned", "minionsKilled"};
 
-		String path = "/Users/justinkuang/code/League-of-Data/Regression/data/clean";
+		String path = new File("./data/clean").getAbsolutePath();
 		String[] files = new String[] {
 				path + "/amber-clean-1.json", 
 				path + "/amber-clean-2.json", 
