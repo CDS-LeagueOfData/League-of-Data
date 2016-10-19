@@ -2,28 +2,20 @@ import java.io.*;
 public class ModelValidator {
 	
 	public static void main(String[] args) {
-		/* String[] files = { 
-				"david-clean-1.json", "david-clean-2.json", "david-clean-3.json", "david-clean-4.json",
-				"david-clean-5.json", "david-clean-6.json", "david-clean-7.json", "david-clean-8.json",
-				"david-clean-9.json", "sam-clean-1.json",   "sam-clean-2.json",   "sam-clean-3.json", 
-				"sam-clean-4.json",   "wilson-clean-1.json","amber-clean-1.json", "amber-clean-2.json"};
-				*/
-		
 
 		String[] params = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
 		
 		File dir = new File("./data/clean/");
-		if(dir.isDirectory()){
-			
+		if(dir.isDirectory()){			
 			// Get file names in ./data/clean/
 			File[] files = dir.listFiles();
 			String[] fileNames = new String[files.length];
 			for(int i = 0; i < files.length; i++){
 				fileNames[i] = files[i].getAbsolutePath();
-			}
-			
+			}			
 
-			for (int n = 2; n < files.length; n++) {
+			System.out.println("Total data: " + files.length);
+			for (int n = 2; n <= files.length; n++) {
 				double res = nFold(n, fileNames, params);
 				System.out.println(n + "-fold validation: " + Math.round(res*100)/100.0);
 			}
@@ -32,7 +24,14 @@ public class ModelValidator {
 		}
 		
 	}
-
+	
+	/** 
+	 * Performs n-fold cross validation
+	 * @param n 
+	 * @param files String array of filenames (absolute file paths)
+	 * @param params String array of parameters we are interested in.
+	 * @return the mean squared error defined as 1/n * (sum of (actual - prediction)^2)
+	 */
 	public static double nFold(int n, String[] files, String[] params) {
 		String[] testSet = new String[files.length / n];
 		String[] trainingSet = new String[files.length - testSet.length];
@@ -68,7 +67,7 @@ public class ModelValidator {
 
 			double[][] predictions = LinearRegression.predict(testValues, coefficients);
 			for (int i = 0; i < testSet.length; i++) {
-				sum += Math.abs(realRatings[i] - (int)predictions[i][0]);
+				sum += Math.pow((realRatings[i] - predictions[i][0]),2);
 			}
 		}
 
