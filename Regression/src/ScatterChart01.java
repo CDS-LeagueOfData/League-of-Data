@@ -47,20 +47,21 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 //			System.out.println(b1[k]);
 //		}
 		
-
+		List<Double> gameTimes = parsey.getGameTime();
 		List<Double> xData = new LinkedList<Double>();
 		List<Double> yData = new LinkedList<Double>();
 		
-		int varOne = 3;
+		int varOne = 1;
 		int varTwo = 4;
 		
 		for(int i = 0;i<a1.length;i++){
-			xData.add(a1[i][varOne]);
-			yData.add(a1[i][varTwo]);
+			xData.add(a1[i][varOne]/gameTimes.get(i));
+			yData.add(a1[i][varTwo]/gameTimes.get(i));
 		}
-		System.out.println(xData);
-		System.out.println(yData);
-
+		System.out.println(gameTimes);
+//		System.out.println(xData);
+//		System.out.println(yData);
+//
 		display(inputClean[varOne]+" vs "+inputClean[varTwo],xData, yData);
 	}
 
