@@ -310,6 +310,31 @@ public class ParseJson {
 		} 
 		return null;
 	}
+	public List<Double> getGameTime(){
+		List<Double> list = new ArrayList<Double>();
+		for (int gameIndex = 0; gameIndex < gameFiles.length; gameIndex++) {
+			try {
+				FileReader file = new FileReader(gameFiles[gameIndex]);
+				JsonReader jsonReader = new JsonReader(file);
+				// Convert to a JSON object to print data
+				JsonParser jp = new JsonParser(); //from gson
+				JsonElement root = jp.parse(jsonReader);
+				JsonObject cleanGame = root.getAsJsonObject();
+				list.add(cleanGame.get("matchDuration").getAsDouble());
+			}
+			catch (FileNotFoundException ex) {
+				ex.printStackTrace();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
+			} 
+		}	
+		
+		
+		return list;
+		
+	}
 
 	public double[][] getValues() {
 		double[][] valueMatrix = new double[gameFiles.length][inputVars.length];
