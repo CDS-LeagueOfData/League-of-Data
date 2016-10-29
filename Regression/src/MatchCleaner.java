@@ -1,41 +1,39 @@
-import net.rithms.riot.api.RiotApi;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
-import java.util.Map;
-import net.rithms.riot.constant.Region;
+
+import net.rithms.riot.api.RiotApi;
+import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.dto.Match.MatchDetail;
 import net.rithms.riot.dto.Match.Participant;
 import net.rithms.riot.dto.Match.ParticipantIdentity;
 import net.rithms.riot.dto.Match.ParticipantStats;
 import net.rithms.riot.dto.Match.ParticipantTimeline;
 import net.rithms.riot.dto.Match.Player;
-import net.rithms.riot.dto.Summoner.Summoner;
-import net.rithms.riot.api.RiotApiException;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.stream.JsonReader;
 
 public class MatchCleaner {
+	// change to own summoner key:
+	private static String apiKey = "RGAPI-ccc47046-1fd6-4c5f-90d7-afaa2a45fcf4";
 	
-	private long matchId;
-	private String rating;
-	private String playerName;
-	private String apiKey = "RGAPI-ccc47046-1fd6-4c5f-90d7-afaa2a45fcf4";
+	// change to pull and save different games
+	private static String playerName = "Voyboy";
+	private static long matchId = 2330413985L;
+	private static String rating = "B-";
+	
+	
+	
+	private int totalCS;
 
 	public MatchCleaner(long id, String r, String pN) {
 		matchId = id;
 		rating = r;
 		playerName = pN;
+		
 	}
 	
 	public MatchDetail getMatch() throws RiotApiException {
@@ -70,11 +68,14 @@ public class MatchCleaner {
 		ParticipantStats pstats = p.getStats();
 		ParticipantTimeline ptime = p.getTimeline();
 		
+		totalCS = (int) (pstats.getMinionsKilled() + pstats.getNeutralMinionsKilled());
+		
 		Gson g = new Gson();
 		String s = g.toJson(pstats);
 		JsonParser jp = new JsonParser();
 		JsonObject stats = (JsonObject)jp.parse(s);
 		stats.addProperty("rating", rating);
+		stats.addProperty("totalCS", totalCS);
 		
 		Gson gg = new Gson();
 		String t = gg.toJson(ptime);
@@ -110,15 +111,11 @@ public class MatchCleaner {
 	}
 
 	public static void main(String[] args) throws RiotApiException, IOException {
-		String summonerName = "Voyboy";
-		long matchId = 2330175432L;
-		String rating = "S";
-		
-		MatchCleaner mc = new MatchCleaner(matchId, rating, summonerName);
+		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter(summonerName + " - " + matchId + ".json")) {
+		try (FileWriter file = new FileWriter("data/clean/" + playerName + " - " + matchId + ".json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
