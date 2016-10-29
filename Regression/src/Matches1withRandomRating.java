@@ -20,7 +20,7 @@ public class Matches1withRandomRating {
 		for (int i = 0; i < 1000; i++) {
 			ratings[i] = ((new Random()).nextDouble() * 5) + 5;
 		}
-		LinearRegression.printMatrix(LinearRegression.approximateRatingCoef(mathces1, ratings));
+		//LinearRegression.printMatrix(LinearRegression.approximateRatingCoef(mathces1, ratings));
 	}
 
 }
