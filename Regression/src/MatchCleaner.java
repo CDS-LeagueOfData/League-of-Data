@@ -30,12 +30,14 @@ public class MatchCleaner {
 	private long matchId;
 	private String rating;
 	private String playerName;
-	private String apiKey = "RGAPI-7260C264-0D73-40D1-BE14-B13998AE15DE";
+	private String apiKey = "RGAPI-4e6c8f09-fcd0-4136-a1f6-acf1edb683df";
+	private int totalCS;
 
 	public MatchCleaner(long id, String r, String pN) {
 		matchId = id;
 		rating = r;
 		playerName = pN;
+		
 	}
 	
 	public MatchDetail getMatch() throws RiotApiException {
@@ -70,11 +72,14 @@ public class MatchCleaner {
 		ParticipantStats pstats = p.getStats();
 		ParticipantTimeline ptime = p.getTimeline();
 		
+		totalCS = (int) (pstats.getMinionsKilled() + pstats.getNeutralMinionsKilled());
+		
 		Gson g = new Gson();
 		String s = g.toJson(pstats);
 		JsonParser jp = new JsonParser();
 		JsonObject stats = (JsonObject)jp.parse(s);
 		stats.addProperty("rating", rating);
+		stats.addProperty("totalCS", totalCS);
 		
 		Gson gg = new Gson();
 		String t = gg.toJson(ptime);
@@ -114,7 +119,7 @@ public class MatchCleaner {
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter("/Users/Amber/Documents/FILE.json")) {
+		try (FileWriter file = new FileWriter("/Users/samdickerman/Documents/FILE.json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
