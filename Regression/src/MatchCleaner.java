@@ -61,7 +61,7 @@ public class MatchCleaner {
 		int id = getParticipantId();
 		MatchDetail md = getMatch();
 		List<Participant> lp = md.getParticipants();
-		Participant p = lp.get(id);
+		Participant p = lp.get(id - 1);
 		return p;
 	}
 	
