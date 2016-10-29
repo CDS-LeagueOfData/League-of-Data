@@ -110,11 +110,11 @@ public class MatchCleaner {
 	}
 
 	public static void main(String[] args) throws RiotApiException, IOException {
-		MatchCleaner mc = new MatchCleaner(2230492162L, "S", "dman22180");
+		MatchCleaner mc = new MatchCleaner(2330802312L, "S", "Doublelift");
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter("/Users/Amber/Documents/FILE.json")) {
+		try (FileWriter file = new FileWriter("/Users/Amber/Documents/doublelift-clean-2.json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
