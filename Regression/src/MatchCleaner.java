@@ -114,7 +114,7 @@ public class MatchCleaner {
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter("/Users/Amber/Documents/FILE.txt")) {
+		try (FileWriter file = new FileWriter("/Users/Amber/Documents/FILE.json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
