@@ -22,7 +22,7 @@ public class ModelValidator {
 				double res = nFold(n, fileNames, params);
 				System.out.println(n + "-fold validation: " + Math.round(res * 100) / 100.0);
 			}
-			int n = 5;
+			int n = 4;
 			double res = leavePOut(n, fileNames, params);
 			System.out.println("Leave " + n + " out: " + Math.round(res * 100) / 100.0);
 		} else {
@@ -105,8 +105,8 @@ public class ModelValidator {
 					index = testSetIndexes[0] + 1;
 			}
 		}
-		int numberofComb =  (int) CombinatoricsUtils.binomialCoefficient(n, p);
-		return differences/numberofComb;
+		int numberofComb = (int) CombinatoricsUtils.binomialCoefficient(n, p);
+		return differences / numberofComb;
 	}
 
 	/**

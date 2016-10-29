@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+
 import net.rithms.riot.constant.Region;
 import net.rithms.riot.dto.Match.MatchDetail;
 import net.rithms.riot.dto.Match.Participant;
@@ -27,10 +29,10 @@ import com.google.gson.stream.JsonReader;
 
 public class MatchCleaner {
 	
-	private long matchId;
-	private String rating;
-	private String playerName;
-	private String apiKey = "RGAPI-4e6c8f09-fcd0-4136-a1f6-acf1edb683df";
+	private static long matchId;
+	private static String rating;
+	private static String playerName;
+	private static String apiKey = "RGAPI-4e6c8f09-fcd0-4136-a1f6-acf1edb683df";
 	private int totalCS;
 
 	public MatchCleaner(long id, String r, String pN) {
@@ -115,14 +117,28 @@ public class MatchCleaner {
 	}
 
 	public static void main(String[] args) throws RiotApiException, IOException {
-		MatchCleaner mc = new MatchCleaner(2230492162L, "S", "dman22180");
+//		Scanner sc = new Scanner(System.in);
+//		System.out.println("Enter your Match ID: ");
+//		Long id = sc.nextLong();
+//		System.out.println("Enter your rating: ");
+//		String r = sc.next();
+//		System.out.println("Enter your Summoner Name: ");
+//		String pN = sc.next();
+		
+		/* ENTER VALUES HERE OR YOU MAY USE SCANNER IF YOU UNCOMMENT IT */
+		Long id = 2326014241L;
+		String r = "S-";
+		String pN = "Imaqtpie"; 
+		/* ************************* */
+		MatchCleaner mc = new MatchCleaner(id, r, pN);
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter("/Users/samdickerman/Documents/FILE.json")) {
+		try (FileWriter file = new FileWriter("FILE.json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
 		}
+//		sc.close();
 	}
 }
