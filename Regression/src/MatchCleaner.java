@@ -134,6 +134,7 @@ public class MatchCleaner {
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
+		/* DONT FORGET TO CHANGE JSON FILE NAME YOU WANT TO CREATE */
 		try (FileWriter file = new FileWriter("FILE.json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
