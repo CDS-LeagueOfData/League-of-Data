@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+
 import net.rithms.riot.constant.Region;
 import net.rithms.riot.dto.Match.MatchDetail;
 import net.rithms.riot.dto.Match.Participant;
@@ -27,15 +29,17 @@ import com.google.gson.stream.JsonReader;
 
 public class MatchCleaner {
 	
-	private long matchId;
-	private String rating;
-	private String playerName;
-	private String apiKey = "RGAPI-7260C264-0D73-40D1-BE14-B13998AE15DE";
+	private static long matchId;
+	private static String rating;
+	private static String playerName;
+	private static String apiKey = "RGAPI-4e6c8f09-fcd0-4136-a1f6-acf1edb683df";
+	private int totalCS;
 
 	public MatchCleaner(long id, String r, String pN) {
 		matchId = id;
 		rating = r;
 		playerName = pN;
+		
 	}
 	
 	public MatchDetail getMatch() throws RiotApiException {
@@ -70,11 +74,14 @@ public class MatchCleaner {
 		ParticipantStats pstats = p.getStats();
 		ParticipantTimeline ptime = p.getTimeline();
 		
+		totalCS = (int) (pstats.getMinionsKilled() + pstats.getNeutralMinionsKilled());
+		
 		Gson g = new Gson();
 		String s = g.toJson(pstats);
 		JsonParser jp = new JsonParser();
 		JsonObject stats = (JsonObject)jp.parse(s);
 		stats.addProperty("rating", rating);
+		stats.addProperty("totalCS", totalCS);
 		
 		Gson gg = new Gson();
 		String t = gg.toJson(ptime);
@@ -119,5 +126,6 @@ public class MatchCleaner {
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
 		}
+//		sc.close();
 	}
 }
