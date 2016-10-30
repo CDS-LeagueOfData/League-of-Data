@@ -30,7 +30,7 @@ public class MatchCleaner {
 	private long matchId;
 	private String rating;
 	private String playerName;
-	private String apiKey = "RGAPI-7260C264-0D73-40D1-BE14-B13998AE15DE";
+	private String apiKey = "RGAPI-9C9A8B11-370F-421A-B2EA-77ADA1E139B2";
 
 	public MatchCleaner(long id, String r, String pN) {
 		matchId = id;
@@ -110,11 +110,11 @@ public class MatchCleaner {
 	}
 
 	public static void main(String[] args) throws RiotApiException, IOException {
-		MatchCleaner mc = new MatchCleaner(2230492162L, "S", "dman22180");
+		MatchCleaner mc = new MatchCleaner(2331642270L, "S-", "Lose is improve");
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter("/Users/Amber/Documents/FILE.json")) {
+		try (FileWriter file = new FileWriter("dyrus-clean-2.json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
