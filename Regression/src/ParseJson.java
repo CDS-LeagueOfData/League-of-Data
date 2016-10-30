@@ -161,6 +161,8 @@ public class ParseJson {
 			for (int matchIndex = 0; matchIndex < matches.size(); matchIndex++) {
 				matchesArray.add((JsonObject) matches.get(matchIndex));
 			}
+			file.close();
+			jsonReader.close();
 			return matchesArray;
 		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
@@ -300,6 +302,8 @@ public class ParseJson {
 			JsonParser jp = new JsonParser(); //from gson
 			JsonElement root = jp.parse(jsonReader);
 			JsonObject cleanGame = root.getAsJsonObject();
+			file.close();
+			jsonReader.close();
 			return (JsonObject) cleanGame.getAsJsonObject("player").get("stats");
 		}
 		catch (FileNotFoundException ex) {
@@ -322,6 +326,8 @@ public class ParseJson {
 				JsonElement root = jp.parse(jsonReader);
 				JsonObject cleanGame = root.getAsJsonObject();
 				list.add(cleanGame.get("matchDuration").getAsDouble());
+				file.close();
+				jsonReader.close();
 			}
 			catch (FileNotFoundException ex) {
 				ex.printStackTrace();
