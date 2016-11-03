@@ -18,12 +18,12 @@ import com.google.gson.JsonParser;
 
 public class MatchCleaner {
 	// change to own summoner key:
-	private static String apiKey = "RGAPI-ccc47046-1fd6-4c5f-90d7-afaa2a45fcf4";
+	private static String apiKey = "RGAPI-7260C264-0D73-40D1-BE14-B13998AE15DE";
 	
 	// change to pull and save different games
-	private static String playerName = "Voyboy";
-	private static long matchId = 2330413985L;
-	private static String rating = "B-";
+	private static String playerName = "Buttface69";
+	private static long matchId = 2236005877L;
+	private static String rating = "A";
 	
 	
 	
