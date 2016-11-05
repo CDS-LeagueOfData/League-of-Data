@@ -38,7 +38,7 @@
         "tenToTwenty": -17.199999999999932
       },
       "damageTakenPerMinDeltas": {
-        "zeroToTen": 1036.0,
+        "zeroToTen": 1036,
         "tenToTwenty": 2262.7
       },
       "damageTakenDiffPerMinDeltas": {
@@ -49,6 +49,7 @@
       "lane": "BOTTOM"
     },
     "stats": {
+      "totalCS": 152,
       "winner": false,
       "rating": "B",
       "champLevel": 23,

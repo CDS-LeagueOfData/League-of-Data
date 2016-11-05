@@ -33,6 +33,7 @@
       "lane": "JUNGLE"
     },
     "stats": {
+      "totalCS": 91,
       "winner": true,
       "rating": "A+",
       "champLevel": 12,
