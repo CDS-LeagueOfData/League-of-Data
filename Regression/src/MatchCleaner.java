@@ -2,7 +2,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
+import net.rithms.riot.api.RateLimitException;
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.dto.Match.MatchDetail;
@@ -124,16 +126,28 @@ public class MatchCleaner {
 		System.out.println("Please paste the summonerID of the player: ");
 		playerName = scanner.next();
 		System.out.println("Please paste the rating that you recorded: ");
-//		System.out.println("hi" + playerName);
+		// System.out.println("hi" + playerName);
 		rating = scanner.next();
 		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
-		JsonObject jo = mc.buildJson();
+		JsonObject jo;
+		try {
+			jo = mc.buildJson();
+		} catch (RateLimitException e) {
+			System.out.println("Rate limit exceeded, trying again in 15 seconds. Please don't quit.");
+			try {
+				TimeUnit.SECONDS.sleep(15);
+			} catch (InterruptedException e1) {
+				
+			}
+			jo = mc.buildJson();
+		}
 		// System.out.println("The matchId is: " + jo.get("matchId"));
 		// System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter(playerName + " - " + matchId + ".json")) {
-			file.write(jo.toString());
-			System.out.println("Successfully Copied JSON Object to File...");
-			// System.out.println("\nJSON Object: " + jo);
-		}
+		FileWriter file = new FileWriter(playerName + " - " + matchId + ".json");
+		file.write(jo.toString());
+		file.close();
+		System.out.println("Successfully Copied JSON Object to File...");
+		// System.out.println("\nJSON Object: " + jo);
+
 	}
 }
