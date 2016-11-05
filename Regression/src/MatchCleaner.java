@@ -18,12 +18,12 @@ import com.google.gson.JsonParser;
 
 public class MatchCleaner {
 	// change to own summoner key:
-	private static String apiKey = "RGAPI-7260C264-0D73-40D1-BE14-B13998AE15DE";
+	private static String apiKey = "RGAPI-0ffc0b91-2560-4462-84a4-01be7bb43217";
 	
 	// change to pull and save different games
-	private static String playerName = "Buttface69";
-	private static long matchId = 2236005877L;
-	private static String rating = "A";
+	private static String playerName = "Frogsuo";
+	private static long matchId = 2337033775L;
+	private static String rating = "S";
 	
 	
 	
@@ -115,7 +115,7 @@ public class MatchCleaner {
 		JsonObject jo = mc.buildJson();
 		System.out.println("The matchId is: " + jo.get("matchId"));
 		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter("data/clean/" + playerName + " - " + matchId + ".json")) {
+		try (FileWriter file = new FileWriter("/users/nickteo/desktop/lol_regression/league-of-data/regression/data/clean/" + playerName + " - " + matchId + ".json")) {
 			file.write(jo.toString());
 			System.out.println("Successfully Copied JSON Object to File...");
 			System.out.println("\nJSON Object: " + jo);
