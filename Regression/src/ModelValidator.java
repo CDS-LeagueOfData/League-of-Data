@@ -11,10 +11,15 @@ public class ModelValidator {
 		File dir = new File("./data/clean/");
 		if (dir.isDirectory()) {
 			// Get file names in ./data/clean/
-			File[] files = dir.listFiles();
+			File[] files = dir.listFiles(new FilenameFilter() {
+			    public boolean accept(File dir, String name) {
+			        return name.toLowerCase().endsWith(".json");
+			    }
+			});
 			String[] fileNames = new String[files.length];
 			for (int i = 0; i < files.length; i++) {
-				fileNames[i] = files[i].getAbsolutePath();
+				if (!files[i].isHidden())
+					fileNames[i] = files[i].getAbsolutePath();
 			}
 
 			System.out.println("Total data: " + files.length);
