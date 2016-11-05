@@ -115,7 +115,7 @@ public class MatchCleaner {
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws RiotApiException, IOException {
-		Scanner scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
 		System.out.println("Please paste your api-key: ");
 		apiKey = scanner.nextLine();
 		System.out
@@ -124,6 +124,7 @@ public class MatchCleaner {
 		System.out.println("Please paste the summonerID of the player: ");
 		playerName = scanner.next();
 		System.out.println("Please paste the rating that you recorded: ");
+//		System.out.println("hi" + playerName);
 		rating = scanner.next();
 		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
 		JsonObject jo = mc.buildJson();
@@ -131,7 +132,7 @@ public class MatchCleaner {
 		// System.out.println(jo.toString());
 		try (FileWriter file = new FileWriter(playerName + " - " + matchId + ".json")) {
 			file.write(jo.toString());
-			// System.out.println("Successfully Copied JSON Object to File...");
+			System.out.println("Successfully Copied JSON Object to File...");
 			// System.out.println("\nJSON Object: " + jo);
 		}
 	}
