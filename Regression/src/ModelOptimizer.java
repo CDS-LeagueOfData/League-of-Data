@@ -45,33 +45,33 @@ public class ModelOptimizer {
 		return false;
 	}
 
-	public static double getMean(List<Double> a) {
+	public static double getMean(double[] a) {
 		double temp = 0;
-		for (Double b : a) {
+		for (double b : a) {
 			temp += b;
 		}
-		return temp / a.size();
+		return temp / a.length;
 	}
 
-	public static double stdDev(List<Double> a) {
+	public static double stdDev(double[] a) {
 		double sumSq = 0;
 		double mean = getMean(a);
-		for (Double b : a) {
+		for (double b : a) {
 			sumSq += Math.pow(b - mean, 2);
 		}
-		return Math.sqrt(sumSq / (a.size() - 1));
+		return Math.sqrt(sumSq / (a.length - 1));
 	}
 
-	public static double calcCorrelation(List<Double> a, List<Double> b) {
+	public static double calcCorrelation(double[] a, double[] b) {
 		double sigma = 0;
 		double aMean = getMean(a);
 		double bMean = getMean(b);
 		double aSTD = stdDev(a);
 		double bSTD = stdDev(b);
-		for (int i = 0; i < a.size(); i++) {
-			sigma += (a.get(i) - aMean) * (b.get(i) - bMean);
+		for (int i = 0; i < a.length; i++) {
+			sigma += (a[i] - aMean) * (b[i] - bMean);
 		}
-		sigma = sigma / (aSTD * bSTD * (a.size() - 1));
+		sigma = sigma / (aSTD * bSTD * (a.length - 1));
 
 		return sigma;
 
