@@ -118,20 +118,21 @@ public class MatchCleaner {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Please paste your api-key: ");
 		apiKey = scanner.nextLine();
-		System.out.println("Please paste the matchID. Remember the L at the end: ");
+		System.out
+				.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
 		matchId = scanner.nextLong();
 		System.out.println("Please paste the summonerID of the player: ");
-		playerName = scanner.nextLine();
+		playerName = scanner.next();
 		System.out.println("Please paste the rating that you recorded: ");
-		rating = scanner.nextLine();
+		rating = scanner.next();
 		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
 		JsonObject jo = mc.buildJson();
-//		System.out.println("The matchId is: " + jo.get("matchId"));
-//		System.out.println(jo.toString());
+		// System.out.println("The matchId is: " + jo.get("matchId"));
+		// System.out.println(jo.toString());
 		try (FileWriter file = new FileWriter(playerName + " - " + matchId + ".json")) {
 			file.write(jo.toString());
-			System.out.println("Successfully Copied JSON Object to File...");
-			System.out.println("\nJSON Object: " + jo);
+			// System.out.println("Successfully Copied JSON Object to File...");
+			// System.out.println("\nJSON Object: " + jo);
 		}
 	}
 }
