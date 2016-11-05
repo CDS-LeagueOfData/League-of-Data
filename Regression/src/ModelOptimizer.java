@@ -1,4 +1,10 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class ModelOptimizer {
 	
@@ -12,8 +18,18 @@ public class ModelOptimizer {
 	
 	public static void main(String[] args){
 	
-		//TODO: maybe move to a method if necessary
-		String[] allParams; 
+		// get all params in String[]
+		JsonObject stats = ParseJson.getStatsFromCleanJson("amber-clean-1.json");
+		Set<Map.Entry<String,JsonElement>> entries = stats.entrySet();
+		ArrayList<String> p = new ArrayList<String>();
+		for (Map.Entry<String, JsonElement> entry : entries) {
+			p.add(entry.getKey());
+		}
+		String[] allParams = new String[p.size()];
+		allParams = p.toArray(allParams);
+		for(String s : allParams) {
+		    System.out.println(s);
+		}
 	}
 	
 	public static Model optimize(){

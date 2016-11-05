@@ -66,6 +66,7 @@
       "stats": {
         "winner": true,
         "rating": "A",
+        "totalCS": 32,
         "champLevel": 17,
         "item0": 0,
         "item1": 2049,
