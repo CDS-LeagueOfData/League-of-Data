@@ -1,7 +1,10 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
+import net.rithms.riot.api.RateLimitException;
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.dto.Match.MatchDetail;
@@ -18,30 +21,28 @@ import com.google.gson.JsonParser;
 
 public class MatchCleaner {
 	// change to own summoner key:
-	private static String apiKey = "RGAPI-ccc47046-1fd6-4c5f-90d7-afaa2a45fcf4";
-	
+	private static String apiKey;
+
 	// change to pull and save different games
-	private static String playerName = "Voyboy";
-	private static long matchId = 2330413985L;
-	private static String rating = "B-";
-	
-	
-	
+	private static String playerName;
+	private static long matchId;
+	private static String rating;
+
 	private int totalCS;
 
 	public MatchCleaner(long id, String r, String pN) {
 		matchId = id;
 		rating = r;
 		playerName = pN;
-		
+
 	}
-	
+
 	public MatchDetail getMatch() throws RiotApiException {
 		RiotApi api = new RiotApi(apiKey);
 		MatchDetail md = api.getMatch(matchId);
 		return md;
 	}
-	
+
 	public int getParticipantId() throws RiotApiException {
 		MatchDetail md = getMatch();
 		List<ParticipantIdentity> p = md.getParticipantIdentities();
@@ -54,7 +55,7 @@ public class MatchCleaner {
 		}
 		return 0;
 	}
-	
+
 	public Participant getParticipant() throws RiotApiException {
 		int id = getParticipantId();
 		MatchDetail md = getMatch();
@@ -62,25 +63,25 @@ public class MatchCleaner {
 		Participant p = lp.get(id - 1);
 		return p;
 	}
-	
+
 	public JsonObject buildPlayer() throws RiotApiException {
 		Participant p = getParticipant();
 		ParticipantStats pstats = p.getStats();
 		ParticipantTimeline ptime = p.getTimeline();
-		
+
 		totalCS = (int) (pstats.getMinionsKilled() + pstats.getNeutralMinionsKilled());
-		
+
 		Gson g = new Gson();
 		String s = g.toJson(pstats);
 		JsonParser jp = new JsonParser();
-		JsonObject stats = (JsonObject)jp.parse(s);
+		JsonObject stats = (JsonObject) jp.parse(s);
 		stats.addProperty("rating", rating);
 		stats.addProperty("totalCS", totalCS);
-		
+
 		Gson gg = new Gson();
 		String t = gg.toJson(ptime);
 		JsonElement time = jp.parse(t);
-		
+
 		JsonObject player = new JsonObject();
 		player.addProperty("teamId", p.getTeamId());
 		player.addProperty("spell1Id", p.getSpell1Id());
@@ -91,7 +92,7 @@ public class MatchCleaner {
 		player.add("stats", stats);
 		return player;
 	}
-	
+
 	public JsonObject buildJson() throws RiotApiException {
 		MatchDetail md = getMatch();
 		JsonObject cleanGame = new JsonObject();
@@ -110,15 +111,43 @@ public class MatchCleaner {
 		return cleanGame;
 	}
 
+	/*
+	 * Please set your working space under run configuration --> arguments -->
+	 * working directory. Set it to be Regression/data/clean
+	 */
+	@SuppressWarnings("resource")
 	public static void main(String[] args) throws RiotApiException, IOException {
+		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
+		System.out.println("Please paste your api-key: ");
+		apiKey = scanner.nextLine();
+		System.out
+				.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+		matchId = scanner.nextLong();
+		System.out.println("Please paste the summonerID of the player: ");
+		playerName = scanner.next();
+		System.out.println("Please paste the rating that you recorded: ");
+		// System.out.println("hi" + playerName);
+		rating = scanner.next();
 		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
-		JsonObject jo = mc.buildJson();
-		System.out.println("The matchId is: " + jo.get("matchId"));
-		System.out.println(jo.toString());
-		try (FileWriter file = new FileWriter("data/clean/" + playerName + " - " + matchId + ".json")) {
-			file.write(jo.toString());
-			System.out.println("Successfully Copied JSON Object to File...");
-			System.out.println("\nJSON Object: " + jo);
+		JsonObject jo;
+		try {
+			jo = mc.buildJson();
+		} catch (RateLimitException e) {
+			System.out.println("Rate limit exceeded, trying again in 15 seconds. Please don't quit.");
+			try {
+				TimeUnit.SECONDS.sleep(15);
+			} catch (InterruptedException e1) {
+				
+			}
+			jo = mc.buildJson();
 		}
+		// System.out.println("The matchId is: " + jo.get("matchId"));
+		// System.out.println(jo.toString());
+		FileWriter file = new FileWriter(playerName + " - " + matchId + ".json");
+		file.write(jo.toString());
+		file.close();
+		System.out.println("Successfully Copied JSON Object to File...");
+		// System.out.println("\nJSON Object: " + jo);
+
 	}
 }
