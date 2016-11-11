@@ -133,12 +133,7 @@ public class MatchCleaner {
 		try {
 			jo = mc.buildJson();
 		} catch (RateLimitException e) {
-			System.out.println("Rate limit exceeded, trying again in 15 seconds. Please don't quit.");
-			try {
-				TimeUnit.SECONDS.sleep(15);
-			} catch (InterruptedException e1) {
-				
-			}
+			System.out.println("Rate limit exceeded, trying again. Please don't quit.");
 			jo = mc.buildJson();
 		}
 		// System.out.println("The matchId is: " + jo.get("matchId"));
