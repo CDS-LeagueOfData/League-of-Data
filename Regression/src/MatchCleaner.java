@@ -110,7 +110,7 @@ public class MatchCleaner {
 		cleanGame.add("player", buildPlayer());
 		return cleanGame;
 	}
-
+	
 	/*
 	 * Please set your working space under run configuration --> arguments -->
 	 * working directory. Set it to be Regression/data/clean

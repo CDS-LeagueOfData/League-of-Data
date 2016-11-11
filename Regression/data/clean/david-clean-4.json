@@ -22,7 +22,7 @@
         "tenToTwenty": 2.7
       },
       "xpPerMinDeltas": {
-        "zeroToTen": 474.0,
+        "zeroToTen": 474,
         "tenToTwenty": 947.6999999999999
       },
       "goldPerMinDeltas": {
@@ -37,6 +37,7 @@
       "lane": "JUNGLE"
     },
     "stats": {
+      "totalCS": 104,
       "winner": false,
       "rating": "B",
       "champLevel": 18,

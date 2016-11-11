@@ -50,6 +50,7 @@
       "lane": "BOTTOM"
     },
     "stats": {
+      "totalCS": 24,
       "rating": "S",
       "unrealKills": 0,
       "item2": 3157,
