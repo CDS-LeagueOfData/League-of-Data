@@ -1,10 +1,11 @@
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 
 public class ModelOptimizer {
 	
@@ -12,8 +13,18 @@ public class ModelOptimizer {
 	static final double THRESHOLD = 0.7;
 	
 	static class Model{
-		String[] params;
-		double score;		
+		LinkedList<String> params;
+		double score;
+		public Model(LinkedList<String> p){
+			params = p;
+			score = calculateScore(params);
+		}
+		
+		public static Model getUpdatedModel(Model m, String p){
+			Model newM = new Model(m.params);
+			newM.params.add(p);
+			return newM;
+		}
 	}
 	
 	public static void main(String[] args){
@@ -21,7 +32,7 @@ public class ModelOptimizer {
 		// get all params in String[]
 		JsonObject stats = ParseJson.getStatsFromCleanJson("amber-clean-1.json");
 		Set<Map.Entry<String,JsonElement>> entries = stats.entrySet();
-		ArrayList<String> p = new ArrayList<String>();
+		LinkedList<String> p = new LinkedList<String>();
 		for (Map.Entry<String, JsonElement> entry : entries) {
 			p.add(entry.getKey());
 		}
@@ -32,12 +43,45 @@ public class ModelOptimizer {
 		}
 	}
 	
-	public static Model optimize(){
-		return null;
+	public static Model optimize(String[] p){
+		// Create set of unused parameters
+		LinkedList<String> available = new LinkedList<String>();
+		for(String s: p)
+			available.add(s);
+		
+		// initialize dummy model
+		Model bestModel = new Model(new LinkedList<String>());
+		
+		boolean modelChanged = true;
+		while(available.size() != 0 && modelChanged){
+			modelChanged = false;
+			
+			// pick next parameter to include
+			String bestP = null;
+			Model bestUpdated = null;
+			for(String param : available){
+				// has to not show significant correlation
+				if(passCorrelationCheck(param, bestModel)){
+					Model testModel = Model.getUpdatedModel(bestModel, param);
+					if(testModel.score < bestUpdated.score){
+						bestP = param;
+						bestUpdated = testModel;
+					}					
+				}
+			}
+			
+			boolean status = available.remove(bestP);
+			if(!status)
+				System.out.println("Error removing parameter " + bestP);
+			bestModel = bestUpdated;			
+		}
+		return bestModel;
 	}
 	
-	
-	public static double calculateScore(String[] params){
+	//should use non-exhaustive 10-fold cross validation
+	public static double calculateScore(LinkedList<String> params){
+		if(params.size() == 0)
+			return Double.MAX_VALUE;
 		return 0.0;
 	}
 
