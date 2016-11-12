@@ -1,6 +1,8 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -13,6 +15,8 @@ import net.rithms.riot.dto.Match.ParticipantIdentity;
 import net.rithms.riot.dto.Match.ParticipantStats;
 import net.rithms.riot.dto.Match.ParticipantTimeline;
 import net.rithms.riot.dto.Match.Player;
+import net.rithms.riot.dto.Static.Champion;
+import net.rithms.riot.dto.Static.ChampionList;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -27,14 +31,17 @@ public class NormalsCleaner {
 	private static String playerName;
 	private static long matchId;
 	private static String rating;
+	private static boolean winner;
+	private static String champion;
 
 	private int totalCS;
 
-	public NormalsCleaner(long id, String r, String pN) {
+	public NormalsCleaner(long id, String r, String pN, String c, boolean w) {
 		matchId = id;
 		rating = r;
 		playerName = pN;
-
+		winner = w;
+		champion = c;
 	}
 
 	public MatchDetail getMatch() throws RiotApiException {
@@ -43,25 +50,25 @@ public class NormalsCleaner {
 		return md;
 	}
 
-	public int getParticipantId() throws RiotApiException {
-		MatchDetail md = getMatch();
-		List<ParticipantIdentity> p = md.getParticipantIdentities();
-		for (int k = 0; k < p.size(); k++) {
-			ParticipantIdentity pi = p.get(k);
-			Player player = pi.getPlayer();
-			if (player.getSummonerName().equals(playerName)) {
-				return pi.getParticipantId();
-			}
-		}
-		return 0;
+	public int getChampionId() throws RiotApiException {
+		RiotApi api = new RiotApi(apiKey);
+		ChampionList cl = api.getDataChampionList();
+		Map<String, Champion> allChamps = cl.getData();	
+		Champion ourChamp = allChamps.get(champion);
+		int id = ourChamp.getId();
+		return id;	
 	}
 
 	public Participant getParticipant() throws RiotApiException {
-		int id = getParticipantId();
+		int id = getChampionId();
 		MatchDetail md = getMatch();
 		List<Participant> lp = md.getParticipants();
-		Participant p = lp.get(id - 1);
-		return p;
+		for (Participant p : lp) {
+			if ((p.getChampionId() == id) && (p.getStats().isWinner() == winner)) {
+				return p;
+			}
+		}
+		return null;
 	}
 
 	public JsonObject buildPlayer() throws RiotApiException {
@@ -120,15 +127,19 @@ public class NormalsCleaner {
 		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
 		System.out.println("Please paste your api-key: ");
 		apiKey = scanner.nextLine();
-		System.out
-		.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+		System.out.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
 		matchId = scanner.nextLong();
-		System.out.println("Please paste the summonerID of the player: ");
+		System.out.println("Please paste the summoner's name: ");
 		playerName = scanner.next();
+		System.out.println("Which champion did they play? (no spaces e.g. TahmKench): ");
+		champion = scanner.next();
+		System.out.println("Did they win? (True or False): ");
+		winner = scanner.nextBoolean();
 		System.out.println("Please paste the rating that you recorded: ");
 		// System.out.println("hi" + playerName);
 		rating = scanner.next();
-		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
+		
+		NormalsCleaner mc = new NormalsCleaner(matchId, rating, playerName, champion, winner);
 		JsonObject jo;
 		try {
 			jo = mc.buildJson();

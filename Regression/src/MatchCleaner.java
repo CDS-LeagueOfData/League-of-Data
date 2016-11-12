@@ -120,8 +120,7 @@ public class MatchCleaner {
 		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
 		System.out.println("Please paste your api-key: ");
 		apiKey = scanner.nextLine();
-		System.out
-				.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+		System.out.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
 		matchId = scanner.nextLong();
 		System.out.println("Please paste the summonerID of the player: ");
 		playerName = scanner.next();
