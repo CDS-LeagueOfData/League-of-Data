@@ -133,7 +133,7 @@ public class NormalsCleaner {
 		playerName = scanner.next();
 		System.out.println("Which champion did they play? (no spaces e.g. TahmKench): ");
 		champion = scanner.next();
-		System.out.println("Did they win? (True or False): ");
+		System.out.println("Did they win? (true or false): ");
 		winner = scanner.nextBoolean();
 		System.out.println("Please paste the rating that you recorded: ");
 		// System.out.println("hi" + playerName);
