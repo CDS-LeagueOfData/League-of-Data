@@ -19,7 +19,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class MatchCleaner {
+public class NormalsCleaner {
 	// change to own summoner key:
 	private static String apiKey;
 
@@ -30,7 +30,7 @@ public class MatchCleaner {
 
 	private int totalCS;
 
-	public MatchCleaner(long id, String r, String pN) {
+	public NormalsCleaner(long id, String r, String pN) {
 		matchId = id;
 		rating = r;
 		playerName = pN;
@@ -110,7 +110,7 @@ public class MatchCleaner {
 		cleanGame.add("player", buildPlayer());
 		return cleanGame;
 	}
-	
+
 	/*
 	 * Please set your working space under run configuration --> arguments -->
 	 * working directory. Set it to be Regression/data/clean
@@ -121,7 +121,7 @@ public class MatchCleaner {
 		System.out.println("Please paste your api-key: ");
 		apiKey = scanner.nextLine();
 		System.out
-				.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+		.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
 		matchId = scanner.nextLong();
 		System.out.println("Please paste the summonerID of the player: ");
 		playerName = scanner.next();

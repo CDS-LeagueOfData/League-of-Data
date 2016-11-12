@@ -38,8 +38,8 @@ public class ScatterChart01 implements ExampleChart<XYChart> {
 		ParseJson parsey = new ParseJson(files, inputClean);
 		double[][] a1 =  parsey.getValues();
 		System.out.println("VALUES");
-		ParseJson.printMatrix(a1);
-		System.out.println(a1);
+//		ParseJson.printMatrix(a1);
+		//System.out.println(a1);
 		
 //		double[] b1 = parsey.getRatings();
 //		System.out.println("RATINGS");

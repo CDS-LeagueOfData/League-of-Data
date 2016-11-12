@@ -33,6 +33,7 @@
       "lane": "TOP"
     },
     "stats": {
+      "totalCS": 82,
       "winner": true,
       "rating": "B",
       "champLevel": 17,
