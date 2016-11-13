@@ -13,56 +13,46 @@ import org.knowm.xchart.style.Styler.LegendPosition;
 public class ScatterChart01 implements ExampleChart<XYChart> {
 
 	public static void main(String[] args) {
-		String[] inputClean = {"kills", "deaths", "assists", "goldEarned", "minionsKilled"};
+		String[] inputClean = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
 
 		String path = new File("./data/clean").getAbsolutePath();
-		String[] files = new String[] {
-				path + "/amber-clean-1.json", 
-				path + "/amber-clean-2.json", 
-				path + "/david-clean-1.json", 
-				path + "/david-clean-2.json", 
-				path + "/david-clean-3.json", 
-				path + "/david-clean-4.json",
-				path + "/david-clean-5.json", 
-				path + "/david-clean-6.json", 
-				path + "/david-clean-7.json", 
-				path + "/david-clean-8.json", 
-				path + "/david-clean-9.json",
-				path + "/sam-clean-1.json", 
-				path + "/sam-clean-2.json", 
-				path + "/sam-clean-3.json", 
-				path + "/sam-clean-4.json", 
-				path + "/wilson-clean-1.json"
-				};
+		File folder = new File("./data/clean");
+		File[] listOfFiles = folder.listFiles();
 		
-		ParseJson parsey = new ParseJson(files, inputClean);
-		double[][] a1 =  parsey.getValues();
-		System.out.println("VALUES");
-//		ParseJson.printMatrix(a1);
-		//System.out.println(a1);
-		
-//		double[] b1 = parsey.getRatings();
-//		System.out.println("RATINGS");
-//		for (int k = 0; k < files.length; k++) {				
-//			System.out.println(b1[k]);
+//		String[] files = new String[listOfFiles.length];
+//
+//		for (int i = 0; i < listOfFiles.length; i++) {
+//				files[i]=listOfFiles[i].getAbsolutePath();
+//			
 //		}
 		
+		String[] files = new String[] { path + "/amber-clean-1.json", path + "/amber-clean-2.json",
+				path + "/david-clean-1.json", path + "/david-clean-2.json", path + "/david-clean-3.json",
+				path + "/david-clean-4.json", path + "/david-clean-5.json", path + "/david-clean-6.json",
+				path + "/david-clean-7.json", path + "/david-clean-8.json", path + "/david-clean-9.json",
+				path + "/sam-clean-1.json", path + "/sam-clean-2.json", path + "/sam-clean-3.json",
+				path + "/sam-clean-4.json", path + "/wilson-clean-1.json", path + "/Anklespankin - 1988321629.json"};
+
+		ParseJson parsey = new ParseJson(files, inputClean);
+		double[][] a1 = parsey.getValues();
+		System.out.println("VALUES");
+
 		List<Double> gameTimes = parsey.getGameTime();
 		List<Double> xData = new LinkedList<Double>();
 		List<Double> yData = new LinkedList<Double>();
-		
+
 		int varOne = 1;
 		int varTwo = 4;
-		
-		for(int i = 0;i<a1.length;i++){
-			xData.add(a1[i][varOne]/gameTimes.get(i));
-			yData.add(a1[i][varTwo]/gameTimes.get(i));
+
+		for (int i = 0; i < a1.length; i++) {
+			xData.add(a1[i][varOne] / gameTimes.get(i));
+			yData.add(a1[i][varTwo] / gameTimes.get(i));
 		}
 		System.out.println(gameTimes);
-//		System.out.println(xData);
-//		System.out.println(yData);
-//
-		display(inputClean[varOne]+" vs "+inputClean[varTwo],xData, yData);
+		// System.out.println(xData);
+		// System.out.println(yData);
+		//
+		display(inputClean[varOne] + " vs " + inputClean[varTwo], xData, yData);
 	}
 
 	public static void display(String name, List a, List b) {

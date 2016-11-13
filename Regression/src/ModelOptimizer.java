@@ -8,94 +8,99 @@ import java.util.Set;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-
 public class ModelOptimizer {
-	
+
 	static final double PENALTY = 10.0;
 	static final double THRESHOLD = 0.7;
-	
-	static class Model{
+
+	static class Model {
 		LinkedList<String> params;
 		double score;
-		public Model(LinkedList<String> p){
+
+		public Model(LinkedList<String> p) {
 			params = p;
 			score = calculateScore(params);
 		}
-		
-		public static Model getUpdatedModel(Model m, String p){
+
+		public static Model getUpdatedModel(Model m, String p) {
 			Model newM = new Model(m.params);
 			newM.params.add(p);
 			return newM;
 		}
 	}
-	
-	public static void main(String[] args){
-	
+
+	public static void main(String[] args) {
+
 		// get all params in String[]
-		JsonObject stats = ParseJson.getStatsFromCleanJson("amber-clean-1.json");
-		Set<Map.Entry<String,JsonElement>> entries = stats.entrySet();
-		LinkedList<String> p = new LinkedList<String>();
-		for (Map.Entry<String, JsonElement> entry : entries) {
-			p.add(entry.getKey());
-		}
-		String[] allParams = new String[p.size()];
-		allParams = p.toArray(allParams);
-		for(String s : allParams) {
-		    System.out.println(s);
-		}
+//		JsonObject stats = ParseJson.getStatsFromCleanJson("./data/clean/amber-clean-1.json");
+//		Set<Map.Entry<String, JsonElement>> entries = stats.entrySet();
+//		LinkedList<String> p = new LinkedList<String>();
+//		for (Map.Entry<String, JsonElement> entry : entries) {
+//			p.add(entry.getKey());
+//		}
+//		
+//		String[] allParams = new String[p.size()];
+//		allParams = p.toArray(allParams);
+//		for (String s : allParams) {
+//			 System.out.println(s);
+//		}
+		String[] allParams = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
+
+		saveModel(getFilesFromDir(), allParams);
+
 	}
-	
-	public static Model optimize(String[] p){
+
+	public static Model optimize(String[] p) {
 		// Create set of unused parameters
 		LinkedList<String> available = new LinkedList<String>();
-		for(String s: p)
+		for (String s : p)
 			available.add(s);
-		
+
 		// initialize dummy model
 		Model bestModel = new Model(new LinkedList<String>());
-		
+
 		boolean modelChanged = true;
-		while(available.size() != 0 && modelChanged){
+		while (available.size() != 0 && modelChanged) {
 			modelChanged = false;
-			
+
 			// pick next parameter to include
 			String bestP = null;
 			Model bestUpdated = null;
-			for(String param : available){
+			for (String param : available) {
 				// has to not show significant correlation
-				if(passCorrelationCheck(param, bestModel)){
+				if (passCorrelationCheck(param, bestModel)) {
 					Model testModel = Model.getUpdatedModel(bestModel, param);
-					if(testModel.score < bestUpdated.score){
+					if (testModel.score < bestUpdated.score) {
 						bestP = param;
 						bestUpdated = testModel;
-					}					
+					}
 				}
 			}
-			
+
 			boolean status = available.remove(bestP);
-			if(!status)
+			if (!status)
 				System.out.println("Error removing parameter " + bestP);
-			bestModel = bestUpdated;			
+			bestModel = bestUpdated;
 		}
 		return bestModel;
 	}
-	
-	
+
 	/**
 	 * Score(params) = V(param) + penalty * params.length
+	 * 
 	 * @param params
 	 * @return
 	 */
-	public static double calculateScore(LinkedList<String> params){
+	public static double calculateScore(LinkedList<String> params) {
 		String[] param = params.toArray(new String[params.size()]);
 		double score = 0;
 		File dir = new File("./data/clean/");
 		if (dir.isDirectory()) {
 			// Get file names in ./data/clean/
 			File[] files = dir.listFiles(new FilenameFilter() {
-			    public boolean accept(File dir, String name) {
-			        return name.toLowerCase().endsWith(".json");
-			    }
+				public boolean accept(File dir, String name) {
+					return name.toLowerCase().endsWith(".json");
+				}
 			});
 			String[] fileNames = new String[files.length];
 			for (int i = 0; i < files.length; i++) {
@@ -103,7 +108,7 @@ public class ModelOptimizer {
 					fileNames[i] = files[i].getAbsolutePath();
 			}
 
-//			System.out.println("Total data: " + files.length);
+			// System.out.println("Total data: " + files.length);
 			score += ModelValidator.nFold(10, fileNames, param);
 		} else {
 			System.out.println("error: not a directory");
@@ -111,7 +116,39 @@ public class ModelOptimizer {
 		return score + params.size() * PENALTY;
 	}
 
-	public static boolean passCorrelationCheck(String param, Model model){
+	public static void saveModel(String[] fileNames, String[] params) {
+		// run the regression
+		ParseJson trainJSON = new ParseJson(fileNames, params);
+		double[][] values = trainJSON.getValues();
+		double[] ratings = trainJSON.getRatings();
+
+		// run the regression on trainingSet to get coefficients
+		double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
+		for(double[] a: coefficients){
+				System.out.println(a+" : " +a[0]);
+			}
+		
+
+	}
+
+	public static String[] getFilesFromDir() {
+		File dir = new File("./data/clean/");
+		// Get file names in ./data/clean/
+		File[] files = dir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.toLowerCase().endsWith(".json");
+			}
+		});
+		String[] fileNames = new String[files.length];
+		for (int i = 0; i < files.length; i++) {
+			if (!files[i].isHidden())
+				fileNames[i] = files[i].getAbsolutePath();
+		}
+
+		return fileNames;
+	}
+
+	public static boolean passCorrelationCheck(String param, Model model) {
 		return false;
 	}
 
@@ -146,5 +183,5 @@ public class ModelOptimizer {
 		return sigma;
 
 	}
-	
+
 }

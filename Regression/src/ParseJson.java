@@ -349,7 +349,21 @@ public class ParseJson {
 			JsonObject stat = getStatsFromCleanJson(gameFiles[gameIndex]);
 			for (int varIndex = 0; varIndex < inputVars.length; varIndex++) {
 				String var = inputVars[varIndex]; 
-				int value = stat.get(var).getAsInt();
+//				System.out.println("var:  "+var);
+//				System.out.println("stat.get(var):   " +stat.get(var));
+				int value = 0;
+				if(var.equals("winner")){
+					boolean boolVal = stat.get(var).getAsBoolean();
+					if(boolVal){
+						value = 1;
+					}
+					else{
+						value = 0;
+					}
+				}
+				else{
+					value = stat.get(var).getAsInt();
+				}
 				valueMatrix[gameIndex][varIndex] = (double) value;
 			}
 		}
