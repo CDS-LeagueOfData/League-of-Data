@@ -4,6 +4,8 @@ import java.io.FilenameFilter;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -117,20 +119,28 @@ public class ModelOptimizer {
 	}
 
 	public static void saveModel(String[] fileNames, String[] params) {
-		// run the regression
-		ParseJson trainJSON = new ParseJson(fileNames, params);
-		double[][] values = trainJSON.getValues();
-		double[] ratings = trainJSON.getRatings();
-
-		// run the regression on trainingSet to get coefficients
-		double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
-		
-		for(int i = 0; i <params.length; i++){
+		String saveFileName = "model.text";
+		try {
+			PrintWriter outputStream = new PrintWriter(saveFileName);
+			// run the regression
+			ParseJson trainJSON = new ParseJson(fileNames, params);
+			double[][] values = trainJSON.getValues();
+			double[] ratings = trainJSON.getRatings();
+	
+			// run the regression on trainingSet to get coefficients
+			double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
 			
-			System.out.println(params[i]+" : "+coefficients[i][0]);
+			for(int i = 0; i <params.length; i++){
+				outputStream.println(params[i]+" : "+coefficients[i][0]);
+				System.out.println(params[i]+" : "+coefficients[i][0]);
+			}
+			outputStream.close();
+			;
+			System.out.println("Text File Created");
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		
-
 	}
 
 	public static String[] getFilesFromDir() {
