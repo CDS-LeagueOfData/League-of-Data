@@ -1,10 +1,10 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Model {
-	LinkedList<String> params;
+	ArrayList<String> params;
 	double[] coefficients;
 	
-	public Model(LinkedList<String> p, double[] c){
+	public Model(ArrayList<String> p, double[] c){
 		params = p;
 		coefficients = c;
 	}
