@@ -120,6 +120,23 @@ public class MatchCleaner {
 			return buildJson();
 		}
 	}
+	
+	public static JsonObject getCleanData() {
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
+		System.out.println("Please paste your api-key: ");
+		apiKey = scanner.nextLine();
+		System.out.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+		matchId = scanner.nextLong();
+		System.out.println("Please paste the summonerID of the player: ");
+		playerName = scanner.next();
+		System.out.println("Please paste the rating that you recorded: ");
+		rating = scanner.next();
+		
+		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
+		//JsonObject jo = mc.buildJson();
+		return mc.buildJson();
+	}
 
 	/*
 	 * Please set your working space under run configuration --> arguments -->
@@ -127,27 +144,23 @@ public class MatchCleaner {
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws RiotApiException, IOException {
-		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
-		System.out.println("Please paste your api-key: ");
-		apiKey = scanner.nextLine();
-		System.out
-				.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
-		matchId = scanner.nextLong();
-		System.out.println("Please paste the summonerID of the player: ");
-		playerName = scanner.next();
-		System.out.println("Please paste the rating that you recorded: ");
-		// System.out.println("hi" + playerName);
-		rating = scanner.next();
-		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
-		JsonObject jo;
-		jo = mc.buildJson();
-		// System.out.println("The matchId is: " + jo.get("matchId"));
-		// System.out.println(jo.toString());
+//		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
+//		System.out.println("Please paste your api-key: ");
+//		apiKey = scanner.nextLine();
+//		System.out.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+//		matchId = scanner.nextLong();
+//		System.out.println("Please paste the summonerID of the player: ");
+//		playerName = scanner.next();
+//		System.out.println("Please paste the rating that you recorded: ");
+//		rating = scanner.next();
+//		
+//		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
+//		JsonObject jo = mc.buildJson();
+		JsonObject jo = getCleanData();
 		FileWriter file = new FileWriter(playerName + " - " + matchId + ".json");
 		file.write(jo.toString());
 		file.close();
 		System.out.println("Successfully Copied JSON Object to File...");
-		// System.out.println("\nJSON Object: " + jo);
 
 	}
 }
