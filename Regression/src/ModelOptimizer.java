@@ -1,4 +1,6 @@
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +87,28 @@ public class ModelOptimizer {
 	 * @return
 	 */
 	public static double calculateScore(LinkedList<String> params){
-		return 0.0;
+		String[] param = params.toArray(new String[params.size()]);
+		double score = 0;
+		File dir = new File("./data/clean/");
+		if (dir.isDirectory()) {
+			// Get file names in ./data/clean/
+			File[] files = dir.listFiles(new FilenameFilter() {
+			    public boolean accept(File dir, String name) {
+			        return name.toLowerCase().endsWith(".json");
+			    }
+			});
+			String[] fileNames = new String[files.length];
+			for (int i = 0; i < files.length; i++) {
+				if (!files[i].isHidden())
+					fileNames[i] = files[i].getAbsolutePath();
+			}
+
+//			System.out.println("Total data: " + files.length);
+			score += ModelValidator.nFold(10, fileNames, param);
+		} else {
+			System.out.println("error: not a directory");
+		}
+		return score + params.size() * PENALTY;
 	}
 
 	public static boolean passCorrelationCheck(String param, Model model){
