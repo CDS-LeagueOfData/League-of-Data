@@ -124,9 +124,11 @@ public class ModelOptimizer {
 
 		// run the regression on trainingSet to get coefficients
 		double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
-		for(double[] a: coefficients){
-				System.out.println(a+" : " +a[0]);
-			}
+		
+		for(int i = 0; i <params.length; i++){
+			
+			System.out.println(params[i]+" : "+coefficients[i][0]);
+		}
 		
 
 	}
