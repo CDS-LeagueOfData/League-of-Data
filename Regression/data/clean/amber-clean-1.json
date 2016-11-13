@@ -23,7 +23,6 @@
         "twentyToThirty": 0.5,
         "thirtyToEnd": 1.0666666666666667
       },
-<<<<<<< HEAD
       "xpPerMinDeltas": {
         "zeroToTen": 323.29999999999995,
         "tenToTwenty": 400.4,
@@ -126,69 +125,4 @@
       "totalTimeCrowdControlDealt": 224
     }
   }
-=======
-      "stats": {
-        "winner": true,
-        "rating": "A",
-        "totalCS": 32,
-        "champLevel": 17,
-        "item0": 0,
-        "item1": 2049,
-        "item2": 3165,
-        "item3": 3190,
-        "item4": 3158,
-        "item5": 3143,
-        "item6": 3364,
-        "kills": 2,
-        "doubleKills": 0,
-        "tripleKills": 0,
-        "quadraKills": 0,
-        "pentaKills": 0,
-        "unrealKills": 0,
-        "largestKillingSpree": 0,
-        "deaths": 2,
-        "assists": 24,
-        "totalDamageDealt": 47761,
-        "totalDamageDealtToChampions": 16712,
-        "totalDamageTaken": 19383,
-        "largestCriticalStrike": 0,
-        "totalHeal": 15981,
-        "minionsKilled": 32,
-        "neutralMinionsKilled": 0,
-        "neutralMinionsKilledTeamJungle": 0,
-        "neutralMinionsKilledEnemyJungle": 0,
-        "goldEarned": 13654,
-        "goldSpent": 12350,
-        "combatPlayerScore": 0,
-        "objectivePlayerScore": 0,
-        "totalPlayerScore": 0,
-        "totalScoreRank": 0,
-        "magicDamageDealtToChampions": 14170,
-        "physicalDamageDealtToChampions": 1642,
-        "trueDamageDealtToChampions": 900,
-        "visionWardsBoughtInGame": 0,
-        "sightWardsBoughtInGame": 0,
-        "magicDamageDealt": 31601,
-        "physicalDamageDealt": 14685,
-        "trueDamageDealt": 1474,
-        "magicDamageTaken": 9660,
-        "physicalDamageTaken": 9498,
-        "trueDamageTaken": 224,
-        "firstBloodKill": false,
-        "firstBloodAssist": false,
-        "firstTowerKill": true,
-        "firstTowerAssist": false,
-        "firstInhibitorKill": false,
-        "firstInhibitorAssist": true,
-        "inhibitorKills": 0,
-        "towerKills": 1,
-        "wardsPlaced": 26,
-        "wardsKilled": 5,
-        "largestMultiKill": 1,
-        "killingSprees": 0,
-        "totalUnitsHealed": 5,
-        "totalTimeCrowdControlDealt": 224
-      }
-    }
->>>>>>> ff9a41c1e57ec03a6210ba5d74c9c9d251d75bf9
 }
