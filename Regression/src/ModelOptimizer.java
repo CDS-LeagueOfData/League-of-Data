@@ -119,7 +119,7 @@ public class ModelOptimizer {
 	}
 
 	public static void saveModel(String[] fileNames, String[] params) {
-		String saveFileName = "model.text";
+		String saveFileName = "./model.text/";
 		try {
 			PrintWriter outputStream = new PrintWriter(saveFileName);
 			// run the regression
