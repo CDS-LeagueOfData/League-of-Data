@@ -93,24 +93,34 @@ public class MatchCleaner {
 		return player;
 	}
 
-	public JsonObject buildJson() throws RiotApiException {
-		MatchDetail md = getMatch();
-		JsonObject cleanGame = new JsonObject();
-		cleanGame.addProperty("matchId", md.getMatchId());
-		cleanGame.addProperty("region", md.getRegion());
-		cleanGame.addProperty("platformId", md.getPlatformId());
-		cleanGame.addProperty("matchMode", md.getMatchMode());
-		cleanGame.addProperty("matchType", md.getMatchType());
-		cleanGame.addProperty("matchCreation", md.getMatchCreation());
-		cleanGame.addProperty("matchDuration", md.getMatchDuration());
-		cleanGame.addProperty("queueType", md.getQueueType());
-		cleanGame.addProperty("mapId", md.getMapId());
-		cleanGame.addProperty("season", md.getSeason());
-		cleanGame.addProperty("matchVersion", md.getMatchVersion());
-		cleanGame.add("player", buildPlayer());
-		return cleanGame;
+	public JsonObject buildJson() {
+		try {
+			MatchDetail md = getMatch();
+			JsonObject cleanGame = new JsonObject();
+			cleanGame.addProperty("matchId", md.getMatchId());
+			cleanGame.addProperty("region", md.getRegion());
+			cleanGame.addProperty("platformId", md.getPlatformId());
+			cleanGame.addProperty("matchMode", md.getMatchMode());
+			cleanGame.addProperty("matchType", md.getMatchType());
+			cleanGame.addProperty("matchCreation", md.getMatchCreation());
+			cleanGame.addProperty("matchDuration", md.getMatchDuration());
+			cleanGame.addProperty("queueType", md.getQueueType());
+			cleanGame.addProperty("mapId", md.getMapId());
+			cleanGame.addProperty("season", md.getSeason());
+			cleanGame.addProperty("matchVersion", md.getMatchVersion());
+			cleanGame.add("player", buildPlayer());
+			return cleanGame;
+		} catch (RiotApiException e) {
+			System.out.println("Rate limit exceeded. Trying again in 10 seconds...");
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e1) {
+				System.out.println("Retry attempt interrupted!");
+			}
+			return buildJson();
+		}
 	}
-	
+
 	/*
 	 * Please set your working space under run configuration --> arguments -->
 	 * working directory. Set it to be Regression/data/clean
@@ -120,7 +130,8 @@ public class MatchCleaner {
 		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
 		System.out.println("Please paste your api-key: ");
 		apiKey = scanner.nextLine();
-		System.out.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+		System.out
+				.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
 		matchId = scanner.nextLong();
 		System.out.println("Please paste the summonerID of the player: ");
 		playerName = scanner.next();
@@ -129,12 +140,7 @@ public class MatchCleaner {
 		rating = scanner.next();
 		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
 		JsonObject jo;
-		try {
-			jo = mc.buildJson();
-		} catch (RateLimitException e) {
-			System.out.println("Rate limit exceeded, trying again. Please don't quit.");
-			jo = mc.buildJson();
-		}
+		jo = mc.buildJson();
 		// System.out.println("The matchId is: " + jo.get("matchId"));
 		// System.out.println(jo.toString());
 		FileWriter file = new FileWriter(playerName + " - " + matchId + ".json");
