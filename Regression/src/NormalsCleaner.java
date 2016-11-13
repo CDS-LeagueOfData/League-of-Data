@@ -46,17 +46,17 @@ public class NormalsCleaner {
 
 	public MatchDetail getMatch() throws RiotApiException {
 		RiotApi api = new RiotApi(apiKey);
-		MatchDetail md = api.getMatch(matchId);
-		return md;
+		return api.getMatch(matchId);
+
 	}
 
 	public int getChampionId() throws RiotApiException {
 		RiotApi api = new RiotApi(apiKey);
 		ChampionList cl = api.getDataChampionList();
-		Map<String, Champion> allChamps = cl.getData();	
+		Map<String, Champion> allChamps = cl.getData();
 		Champion ourChamp = allChamps.get(champion);
 		int id = ourChamp.getId();
-		return id;	
+		return id;
 	}
 
 	public Participant getParticipant() throws RiotApiException {
@@ -73,7 +73,13 @@ public class NormalsCleaner {
 
 	public JsonObject buildPlayer() throws RiotApiException {
 		Participant p = getParticipant();
-		ParticipantStats pstats = p.getStats();
+		ParticipantStats pstats = null;
+		try {
+			pstats = p.getStats();
+		} catch (NullPointerException e) {
+			System.err.println("Invalid summoner ID");
+			System.exit(1);
+		}
 		ParticipantTimeline ptime = p.getTimeline();
 
 		totalCS = (int) (pstats.getMinionsKilled() + pstats.getNeutralMinionsKilled());
@@ -127,7 +133,8 @@ public class NormalsCleaner {
 		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
 		System.out.println("Please paste your api-key: ");
 		apiKey = scanner.nextLine();
-		System.out.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
+		System.out
+				.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
 		matchId = scanner.nextLong();
 		System.out.println("Please paste the summoner's name: ");
 		playerName = scanner.next();
@@ -138,7 +145,7 @@ public class NormalsCleaner {
 		System.out.println("Please paste the rating that you recorded: ");
 		// System.out.println("hi" + playerName);
 		rating = scanner.next();
-		
+
 		NormalsCleaner mc = new NormalsCleaner(matchId, rating, playerName, champion, winner);
 		JsonObject jo;
 		try {
