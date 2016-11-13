@@ -37,6 +37,11 @@ public class ModelOptimizer {
 	}
 	
 	
+	/**
+	 * Score(params) = V(param) + penalty * params.length
+	 * @param params
+	 * @return
+	 */
 	public static double calculateScore(String[] params){
 		return 0.0;
 	}
