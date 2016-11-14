@@ -34,21 +34,29 @@ public class ModelOptimizer {
 	public static void main(String[] args) {
 
 		// get all params in String[]
-//		JsonObject stats = ParseJson.getStatsFromCleanJson("./data/clean/amber-clean-1.json");
-//		Set<Map.Entry<String, JsonElement>> entries = stats.entrySet();
-//		LinkedList<String> p = new LinkedList<String>();
-//		for (Map.Entry<String, JsonElement> entry : entries) {
-//			p.add(entry.getKey());
-//		}
-//		
-//		String[] allParams = new String[p.size()];
-//		allParams = p.toArray(allParams);
-//		for (String s : allParams) {
-//			 System.out.println(s);
-//		}
-		String[] allParams = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
+		JsonObject stats = ParseJson.getStatsFromCleanJson("./data/clean/amber-clean-1.json");
+		stats.remove("item0");
+		stats.remove("item1");
+		stats.remove("item2");
+		stats.remove("item3");
+		stats.remove("item4");
+		stats.remove("item5");
+		stats.remove("item6");
+		Set<Map.Entry<String, JsonElement>> entries = stats.entrySet();
+		LinkedList<String> p = new LinkedList<String>();
+		for (Map.Entry<String, JsonElement> entry : entries) {
+			if (!(entry.getValue().getAsJsonPrimitive().isBoolean()) && !(entry.getValue().getAsJsonPrimitive().isString())) {
+					p.add(entry.getKey());
+			}
+		}
+		String[] allParams = new String[p.size()];
+		allParams = p.toArray(allParams);
+		for (String s : allParams) {
+			 System.out.println(s);
+		}
+		String[] params = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
 
-		saveModel(getFilesFromDir(), allParams);
+		saveModel(getFilesFromDir(), params);
 
 	}
 
