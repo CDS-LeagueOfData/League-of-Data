@@ -154,7 +154,7 @@ public class ModelOptimizer {
 			//Close text file and create
 			outputStream.close();
 			;
-			System.out.println("Text File Created in Regression");
+			System.out.println("text file created in Regression directory");
 			
 		} catch (FileNotFoundException e) {
 			
