@@ -127,26 +127,37 @@ public class ModelOptimizer {
 	}
 
 	public static void saveModel(String[] fileNames, String[] params) {
+		
+		//Name the text file
 		String saveFileName = "./model.text/";
+		
 		try {
 			PrintWriter outputStream = new PrintWriter(saveFileName);
-			// run the regression
-			ParseJson trainJSON = new ParseJson(fileNames, params);
-			double[][] values = trainJSON.getValues();
-			double[] ratings = trainJSON.getRatings();
+			
+			// Get the values and the ratings from the given file names and parameters
+			ParseJson opJSON = new ParseJson(fileNames, params);
+			double[][] values = opJSON.getValues();
+			double[] ratings = opJSON.getRatings();
 	
-			// run the regression on trainingSet to get coefficients
+			// run the regression on optimizedSet to get coefficients
 			double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
 			
 			for(int i = 0; i <params.length; i++){
+				
+				//Printing to text file
 				outputStream.println(params[i]+" : "+coefficients[i][0]);
+				
+				//Print to console
 				System.out.println(params[i]+" : "+coefficients[i][0]);
 			}
+			
+			//Close text file and create
 			outputStream.close();
 			;
-			System.out.println("Text File Created");
+			System.out.println("Text File Created in Regression");
 			
 		} catch (FileNotFoundException e) {
+			
 			e.printStackTrace();
 		}
 	}
