@@ -155,7 +155,7 @@ public class MatchCleaner {
 		
 		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
 		JsonObject jo = mc.buildJson();
-		FileWriter file = new FileWriter(playerName + " - " + matchId + ".json");
+		FileWriter file = new FileWriter("./data/clean/"+ playerName + " - " + matchId + ".json");
 		file.write(jo.toString());
 		file.close();
 		System.out.println("Successfully Copied JSON Object to File...");
