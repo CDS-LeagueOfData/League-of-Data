@@ -139,12 +139,12 @@ public class ModelOptimizer {
 			double[][] values = opJSON.getValues();
 			double[] ratings = opJSON.getRatings();
 	
-			// run the regression on optimizedSet to get coefficients
+			// Run the regression on optimizedSet to get coefficients
 			double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
 			
 			for(int i = 0; i <params.length; i++){
 				
-				//Printing to text file
+				//Print to text file
 				outputStream.println(params[i]+" : "+coefficients[i][0]);
 				
 				//Print to console
@@ -153,7 +153,6 @@ public class ModelOptimizer {
 			
 			//Close text file and create
 			outputStream.close();
-			;
 			System.out.println("text file created in Regression directory");
 			
 		} catch (FileNotFoundException e) {
