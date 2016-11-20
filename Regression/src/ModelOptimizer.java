@@ -4,6 +4,8 @@ import java.io.FilenameFilter;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -32,21 +34,29 @@ public class ModelOptimizer {
 	public static void main(String[] args) {
 
 		// get all params in String[]
-//		JsonObject stats = ParseJson.getStatsFromCleanJson("./data/clean/amber-clean-1.json");
-//		Set<Map.Entry<String, JsonElement>> entries = stats.entrySet();
-//		LinkedList<String> p = new LinkedList<String>();
-//		for (Map.Entry<String, JsonElement> entry : entries) {
-//			p.add(entry.getKey());
-//		}
-//		
-//		String[] allParams = new String[p.size()];
-//		allParams = p.toArray(allParams);
-//		for (String s : allParams) {
-//			 System.out.println(s);
-//		}
-		String[] allParams = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
+		JsonObject stats = ParseJson.getStatsFromCleanJson("./data/clean/amber-clean-1.json");
+		stats.remove("item0");
+		stats.remove("item1");
+		stats.remove("item2");
+		stats.remove("item3");
+		stats.remove("item4");
+		stats.remove("item5");
+		stats.remove("item6");
+		Set<Map.Entry<String, JsonElement>> entries = stats.entrySet();
+		LinkedList<String> p = new LinkedList<String>();
+		for (Map.Entry<String, JsonElement> entry : entries) {
+			if (!(entry.getValue().getAsJsonPrimitive().isBoolean()) && !(entry.getValue().getAsJsonPrimitive().isString())) {
+					p.add(entry.getKey());
+			}
+		}
+		String[] allParams = new String[p.size()];
+		allParams = p.toArray(allParams);
+		for (String s : allParams) {
+			 System.out.println(s);
+		}
+		String[] params = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
 
-		saveModel(getFilesFromDir(), allParams);
+		saveModel(getFilesFromDir(), params);
 
 	}
 
@@ -117,18 +127,38 @@ public class ModelOptimizer {
 	}
 
 	public static void saveModel(String[] fileNames, String[] params) {
-		// run the regression
-		ParseJson trainJSON = new ParseJson(fileNames, params);
-		double[][] values = trainJSON.getValues();
-		double[] ratings = trainJSON.getRatings();
-
-		// run the regression on trainingSet to get coefficients
-		double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
-		for(double[] a: coefficients){
-				System.out.println(a+" : " +a[0]);
-			}
 		
-
+		//Name the text file
+		String saveFileName = "./model.text/";
+		
+		try {
+			PrintWriter outputStream = new PrintWriter(saveFileName);
+			
+			// Get the values and the ratings from the given file names and parameters
+			ParseJson opJSON = new ParseJson(fileNames, params);
+			double[][] values = opJSON.getValues();
+			double[] ratings = opJSON.getRatings();
+	
+			// Run the regression on optimizedSet to get coefficients
+			double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
+			
+			for(int i = 0; i <params.length; i++){
+				
+				//Print to text file
+				outputStream.println(params[i]+" : "+coefficients[i][0]);
+				
+				//Print to console
+				System.out.println(params[i]+" : "+coefficients[i][0]);
+			}
+			
+			//Close text file and create
+			outputStream.close();
+			System.out.println("text file created in Regression directory");
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		}
 	}
 
 	public static String[] getFilesFromDir() {
