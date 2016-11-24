@@ -20,6 +20,14 @@ public class ParseJson {
 	private static String pathName;
 	private static String[] inputVars;
 	private static String[] gameFiles;
+	
+	/**
+	 * Constructor: initialize file path name (String)
+	 * @param pN
+	 */
+	public ParseJson(String pN) {
+		pathName = pN;
+	}
 
 	/** Constructor: initialize file path name (String) and
 	 * .input variables (String[])
@@ -67,6 +75,9 @@ public class ParseJson {
 
 	//*********** JUST ME TESTING CODE THIS WILL NOT BE IN FINAL CLASS FILE **********////
 	public static void main(String[] args) {
+		ParseJson pjtest = new ParseJson("/Users/samdickerman/Documents/CDS/League-of-Data/Regression/data/clean/doublelift-clean-1.json");
+		int test = pjtest.giveMeIntData("totalCS");
+		System.out.println("This is a test: " +test);
 		//        try {
 		//          String pathName = "/Users/samdickerman/Downloads/noTimeline.json";
 		//          FileReader file = new FileReader(pathName);
@@ -389,6 +400,14 @@ public class ParseJson {
 			ratings[k] = convertToRating(letter);
 		}
 		return ratings;
+	}
+	
+	/* Can not get boolean or String data such as, winner or rating */
+	public int giveMeIntData(String statStr) {
+		int data;
+		JsonObject statsObj = getStatsFromCleanJson(pathName);
+		data = statsObj.get(statStr).getAsInt();
+		return data;
 	}
 }
 
