@@ -13,8 +13,8 @@ import com.google.gson.JsonObject;
 
 public class ModelOptimizer {
 
-	static final double PENALTY = 0.0;
-	static final double THRESHOLD = 0.9;
+	static final double PENALTY = 7.5;
+	static final double THRESHOLD = 0.95;
 	static String[]   allFiles;
 	static String[]   allParams;
 	static double[][] allValues;
@@ -62,23 +62,40 @@ public class ModelOptimizer {
 		ParseJson parsey = new ParseJson(allFiles, allParams);
 		allValues= parsey.getValues();
 		
+		System.out.println("Optimizing parameters...");
 		Model opt = optimize(allParams);
 		
 		String[] params = new String[opt.params.size()];
 	
+		System.out.println("Saving to file...");
 		saveModel(getFilesFromDir(), opt.params.toArray(params));
+		System.out.println("Score of: " + opt.score);
 
 	}
 
 	public static Model optimize(String[] p) {
+		Model actualBestModel = new Model(new LinkedList<String>());
+		actualBestModel.score = Double.MAX_VALUE;
+		for( String s : p){
+			System.out.println("NEW MODEL starting with " + s);
+			Model m = optimizeOnParam(p, s);
+			if (m.score < actualBestModel.score) {
+				actualBestModel = m;
+			}
+		}		
+		return actualBestModel;
+	}
+	
+	public static Model optimizeOnParam(String[] p, String startParam){
 		// Create set of unused parameters
 		LinkedList<String> available = new LinkedList<String>();
 		for (String s : p)
 			available.add(s);
-
-		// initialize dummy model
+		
+		//initial model
 		Model bestModel = new Model(new LinkedList<String>());
-
+		bestModel.params.add(startParam);
+		
 		boolean modelChanged = true;
 		while (available.size() != 0 && modelChanged) {
 			modelChanged = false;
@@ -89,6 +106,7 @@ public class ModelOptimizer {
 			for (String param : available) {
 				// has to not show significant correlation
 				if (passCorrelationCheck(param, bestModel)) {
+					//System.out.println("Passed corr check");
 					Model testModel = Model.getUpdatedModel(bestModel, param);
 					if (testModel.score < bestUpdated.score) {
 						bestP = param;
@@ -100,11 +118,16 @@ public class ModelOptimizer {
 			}
 
 			boolean status = available.remove(bestP);
-			if (!status)
-				System.out.println("Error removing parameter " + bestP);
-			else
+			if (status) {
 				bestModel = bestUpdated;
+				modelChanged = true;
+			} else {
+				// bestP = null
+			}
+				
+			
 		}
+		
 		return bestModel;
 	}
 
@@ -116,8 +139,17 @@ public class ModelOptimizer {
 	 */
 	public static double calculateScore(LinkedList<String> params) {
 		String[] param = params.toArray(new String[params.size()]);
-		double score = ModelValidator.nFold(10, allFiles, param) + PENALTY;
-		System.out.println("SCORE: " + score);
+		double score;
+		try {
+			score = ModelValidator.nFold(10, allFiles, param);
+			//System.out.println("SCORE:   " + score);
+			//System.out.println("Penalty: " + param.length*PENALTY);
+			score += param.length*PENALTY;
+			
+		} catch (Exception e){
+			score = Double.MAX_VALUE;
+			//System.out.println("singular matrix");
+		}
 		return score;
 	}
 
@@ -169,6 +201,7 @@ public class ModelOptimizer {
 			if (!files[i].isHidden())
 				fileNames[i] = files[i].getAbsolutePath();
 		}
+		System.out.println(files.length + " files");
 
 		return fileNames;
 	}

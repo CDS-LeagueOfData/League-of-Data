@@ -6,16 +6,32 @@ public class ModelValidator {
 
 	public static void main(String[] args) {
 
-		String[] params = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
+		//String[] params = { "kills", "deaths", "assists", "goldEarned", "minionsKilled" }; //errors of 2s
 
-		File dir = new File("./data/clean/");
+		String[] params = { "assists", "champLevel", "largestKillingSpree"}; //errors of 5s
+		
+		params = new String[] { "deaths", "champLevel"}; //errors of 3s
+		
+		// C = 0, T = 0.95
+		// C = 1, T = 0.95 -> score of 3.64
+		params = new String[] { "deaths", "totalCS", "assists", "doubleKills", "goldSpent", "largestKillingSpree", "magicDamageDealtToChampions"}; //errors of 2.67
+		
+		// C = 5, T = 0.95 -> 7.9613
+		// 10-fold errors 2.65
+		params = new String[] { "assists", "champLevel", "deaths", "doubleKills", "largestKillingSpree", "magicDamageDealtToChampions"};
+		
+		//10-fold errors of 2.14
+		params = new String[] { "kills", "deaths", "assists", "goldEarned", "minionsKilled" };
+		
+		File dir = new File("./");
 		if (dir.isDirectory()) {
-			// Get file names in ./data/clean/
+			// Get file names in ./data/clean/		
 			File[] files = dir.listFiles(new FilenameFilter() {
 			    public boolean accept(File dir, String name) {
 			        return name.toLowerCase().endsWith(".json");
 			    }
 			});
+			
 			String[] fileNames = new String[files.length];
 			for (int i = 0; i < files.length; i++) {
 				if (!files[i].isHidden())
@@ -31,7 +47,7 @@ public class ModelValidator {
 			double res = leavePOut(n, fileNames, params);
 			System.out.println("Leave " + n + " out: " + Math.round(res * 100) / 100.0);
 		} else {
-			System.out.println("error: not a directory");
+			System.out.println("error: not a directory - " + dir.getAbsolutePath());
 		}
 
 	}
