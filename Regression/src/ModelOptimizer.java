@@ -147,7 +147,7 @@ public class ModelOptimizer {
 			score += param.length*PENALTY;
 			
 		} catch (Exception e){
-			score = Double.MAX_VALUE;
+			score = Integer.MAX_VALUE;
 			//System.out.println("singular matrix");
 		}
 		return score;
@@ -156,7 +156,7 @@ public class ModelOptimizer {
 	public static void saveModel(String[] fileNames, String[] params) {
 		
 		//Name the text file
-		String saveFileName = "./model.text/";
+		String saveFileName = "./model.txt/";
 		
 		try {
 			PrintWriter outputStream = new PrintWriter(saveFileName);
