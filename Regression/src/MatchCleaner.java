@@ -129,8 +129,8 @@ public class MatchCleaner {
 		matchId = scanner.nextLong();
 		System.out.println("Please paste the summonerID of the player: ");
 		playerName = scanner.next();
-		System.out.println("Please paste the rating that you recorded: ");
-		rating = scanner.next();
+//		System.out.println("Please paste the rating that you recorded: ");
+//		rating = scanner.next();
 		
 		MatchCleaner mc = new MatchCleaner(matchId, rating, playerName);
 		//JsonObject jo = mc.buildJson();

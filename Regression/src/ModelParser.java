@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class ModelParser {
 	public static Model parseModel() {
 		try {
+			@SuppressWarnings("resource")
 			BufferedReader bf = new BufferedReader(new FileReader(new File("model.txt")));
 			bf.readLine(); // first line indicates param length
 			String line;
