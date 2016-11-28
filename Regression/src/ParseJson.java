@@ -359,7 +359,7 @@ public class ParseJson {
 				String var = inputVars[varIndex]; 
 //				System.out.println("var:  "+var);
 //				System.out.println("stat.get(var):   " +stat.get(var));
-				int value = 0;
+				double value = 0;
 				if(var.equals("winner")){
 					boolean boolVal = stat.get(var).getAsBoolean();
 					if(boolVal){
@@ -370,9 +370,9 @@ public class ParseJson {
 					}
 				}
 				else{
-					value = stat.get(var).getAsInt();
+					value = stat.get(var).getAsDouble();
 				}
-				valueMatrix[gameIndex][varIndex] = (double) value;
+				valueMatrix[gameIndex][varIndex] = value;
 			}
 		}
 		return valueMatrix;
