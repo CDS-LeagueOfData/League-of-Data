@@ -360,6 +360,14 @@ public class ParseJson {
 //				System.out.println("var:  "+var);
 //				System.out.println("stat.get(var):   " +stat.get(var));
 				int value = 0;
+				boolean b;
+				try{
+					value = stat.get(var).getAsInt();
+				} catch (ClassCastException e){
+					b = stat.get(var).getAsBoolean();
+					value = b ? 1 : 0;
+				}
+				/*
 				if(var.equals("winner")){
 					boolean boolVal = stat.get(var).getAsBoolean();
 					if(boolVal){
@@ -372,6 +380,8 @@ public class ParseJson {
 				else{
 					value = stat.get(var).getAsInt();
 				}
+				*/
+				
 				valueMatrix[gameIndex][varIndex] = (double) value;
 			}
 		}
