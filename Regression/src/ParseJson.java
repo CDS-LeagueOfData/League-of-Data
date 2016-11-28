@@ -402,8 +402,14 @@ public class ParseJson {
 	/* Can not get boolean or String data such as, winner or rating */
 	public int giveMeIntData(String statStr) {
 		int data;
+		boolean d;
 		JsonObject statsObj = getStatsFromCleanJson(pathName);
-		data = statsObj.get(statStr).getAsInt();
+		try{
+			data = statsObj.get(statStr).getAsInt();
+		} catch (Exception e){
+			d = statsObj.get(statStr).getAsBoolean();
+			data = d ? 1:0;
+		}
 		return data;
 	}
 }
