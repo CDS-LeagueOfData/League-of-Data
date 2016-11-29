@@ -1,19 +1,20 @@
 
-import java.io.File;
+import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class ModelOptimizer {
 
-	static final double PENALTY = 7.5;
+	static final double PENALTY = 2.5;
 	static final double THRESHOLD = 0.90;
 	static String[]   allFiles;
 	static String[]   allParams;
@@ -35,7 +36,7 @@ public class ModelOptimizer {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		// get all params in String[]
 		JsonObject stats = ParseJson.getStatsFromCleanJson("./data/clean/amber-clean-1.json");
@@ -62,6 +63,15 @@ public class ModelOptimizer {
 		ParseJson parsey = new ParseJson(allFiles, allParams);
 		allValues= parsey.getValues();
 		
+		PrintWriter out = new PrintWriter(new FileWriter(new File("values.txt")));
+		for(int r = 0; r < allValues.length; r++){
+			for(int c = 0; c < allValues[r].length; c++){
+				out.print(allValues[r][c] + "\t");
+			}
+			out.println();
+		}
+		out.close();
+		
 		System.out.println("Optimizing parameters...");
 		Model opt = optimize(allParams);
 		
@@ -69,6 +79,7 @@ public class ModelOptimizer {
 	
 		System.out.println("Saving to file...");
 		System.out.println("Score of: " + opt.score);
+		System.out.println("# of params used: " + opt.params.size());
 		saveModel(getFilesFromDir(), opt.params.toArray(params));
 
 	}
@@ -107,13 +118,12 @@ public class ModelOptimizer {
 			for (String param : available) {
 				// has to not show significant correlation
 				if (passCorrelationCheck(param, bestModel)) {
-					//System.out.println("Passed corr check");
 					Model testModel = Model.getUpdatedModel(bestModel, param);
 					if (testModel.score < bestUpdated.score) {
 						bestP = param;
 						bestUpdated = testModel;
 					}
-				}
+				} 
 			}
 
 			boolean status = available.remove(bestP);
@@ -121,7 +131,9 @@ public class ModelOptimizer {
 				bestModel = bestUpdated;
 				modelChanged = true;
 				System.out.println("  added " + bestP);
-			} 
+			} else {
+				System.out.println("  tried to remove " + bestP);
+			}
 		}
 		return bestModel;
 	}
