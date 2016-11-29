@@ -356,7 +356,7 @@ public class ParseJson {
 		for (int gameIndex = 0; gameIndex < gameFiles.length; gameIndex++) {
 			JsonObject stat = getStatsFromCleanJson(gameFiles[gameIndex]);
 			for (int varIndex = 0; varIndex < inputVars.length; varIndex++) {
-				String var = inputVars[varIndex]; 
+				String var = inputVars[varIndex];
 //				System.out.println("var:  "+var);
 //				System.out.println("stat.get(var):   " +stat.get(var));
 				int value = 0;

@@ -169,8 +169,7 @@ public class ModelOptimizer {
 			// Run the regression on optimizedSet to get coefficients
 			double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
 			
-			for(int i = 0; i <params.length; i++){
-				
+			for(int i = 0; i <params.length; i++){				
 				//Print to text file
 				outputStream.println(params[i]+" : "+coefficients[i][0]);
 				
@@ -208,10 +207,15 @@ public class ModelOptimizer {
 
 	public static boolean passCorrelationCheck(String param, Model model) {
 		int ind = Arrays.binarySearch(allParams, param);
-		double[] paramVs = allValues[ind];
+		double[] paramVs = new double[allValues[0].length];
+		for(int r = 0; r < allValues[0].length; r++)
+			paramVs[r] = allValues[r][ind];
 		for(String p: model.params){
 			ind = Arrays.binarySearch(allParams, p);
-			double[] paramT = allValues[ind];
+			double[] paramT = new double[allValues[0].length];
+			for(int r = 0; r < allValues[0].length; r++)
+				paramT[r] = allValues[r][ind];
+			
 			if(Math.abs(calcCorrelation(paramVs, paramT)) >= THRESHOLD)
 				return false;
 		}
