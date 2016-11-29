@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
@@ -14,9 +13,9 @@ import com.google.gson.JsonObject;
 public class ModelOptimizer {
 
 	static final double PENALTY = 7.5;
-	static final double THRESHOLD = 0.95;
-	static String[] allFiles;
-	static String[] allParams;
+	static final double THRESHOLD = 0.90;
+	static String[]   allFiles;
+	static String[]   allParams;
 	static double[][] allValues;
 
 	static class Model {
@@ -49,78 +48,79 @@ public class ModelOptimizer {
 		Set<Map.Entry<String, JsonElement>> entries = stats.entrySet();
 		LinkedList<String> p = new LinkedList<String>();
 		for (Map.Entry<String, JsonElement> entry : entries) {
-			if (!(entry.getValue().getAsJsonPrimitive().isBoolean())
-					&& !(entry.getValue().getAsJsonPrimitive().isString())) {
-				p.add(entry.getKey());
+			if (!(entry.getValue().getAsJsonPrimitive().isBoolean()) && !(entry.getValue().getAsJsonPrimitive().isString())) {
+					p.add(entry.getKey());
 			}
 		}
-
+		
 		allParams = p.toArray(new String[p.size()]);
 		Arrays.sort(allParams);
+		System.out.println("Number of parameters: " + allParams.length);
 
 		allFiles = getFilesFromDir();
 		ParseJson parsey = new ParseJson(allFiles, allParams);
-		allValues = parsey.getValues();
-
+		allValues= parsey.getValues();
+		
 		System.out.println("Optimizing parameters...");
 		Model opt = optimize(allParams);
-
+		
 		String[] params = new String[opt.params.size()];
-
+	
 		System.out.println("Saving to file...");
-		saveModel(getFilesFromDir(), opt.params.toArray(params));
 		System.out.println("Score of: " + opt.score);
+		saveModel(getFilesFromDir(), opt.params.toArray(params));
 
 	}
 
 	public static Model optimize(String[] p) {
 		Model actualBestModel = new Model(new LinkedList<String>());
 		actualBestModel.score = Double.MAX_VALUE;
-		for (String s : p) {
+		for( String s : p){
 			System.out.println("NEW MODEL starting with " + s);
 			Model m = optimizeOnParam(p, s);
 			if (m.score < actualBestModel.score) {
 				actualBestModel = m;
 			}
-		}
+		}		
 		return actualBestModel;
 	}
-
-	public static Model optimizeOnParam(String[] p, String startParam) {
+	
+	public static Model optimizeOnParam(String[] p, String startParam){
 		// Create set of unused parameters
 		LinkedList<String> available = new LinkedList<String>();
 		for (String s : p)
 			available.add(s);
-
-		// initial model
-		Model bestModel = new Model(new LinkedList<String>());
-		bestModel.params.add(startParam);
+		
+		//initial model
+		LinkedList<String> ps = new LinkedList<String>();
+		ps.add(startParam);
+		Model bestModel = new Model(ps);
+		
 		boolean modelChanged = true;
 		while (available.size() != 0 && modelChanged) {
 			modelChanged = false;
+
 			// pick next parameter to include
 			String bestP = null;
 			Model bestUpdated = bestModel;
 			for (String param : available) {
 				// has to not show significant correlation
 				if (passCorrelationCheck(param, bestModel)) {
-					// System.out.println("Passed corr check");
+					//System.out.println("Passed corr check");
 					Model testModel = Model.getUpdatedModel(bestModel, param);
 					if (testModel.score < bestUpdated.score) {
 						bestP = param;
 						bestUpdated = testModel;
 					}
-				} else {
-					// System.out.println("failed corr check");
 				}
 			}
+
 			boolean status = available.remove(bestP);
 			if (status) {
 				bestModel = bestUpdated;
 				modelChanged = true;
-			} else {
-				// bestP = null
-			}
+				System.out.println("  added " + bestP);
+			} 
 		}
 		return bestModel;
 	}
@@ -136,48 +136,47 @@ public class ModelOptimizer {
 		double score;
 		try {
 			score = ModelValidator.nFold(10, allFiles, param);
-			// System.out.println("SCORE: " + score);
-			// System.out.println("Penalty: " + param.length*PENALTY);
-			score += param.length * PENALTY;
-
-		} catch (Exception e) {
+			//System.out.println("SCORE:   " + score);
+			//System.out.println("Penalty: " + param.length*PENALTY);
+			score += param.length*PENALTY;
+			
+		} catch (Exception e){
 			score = Integer.MAX_VALUE;
-			// System.out.println("singular matrix");
+			//System.out.println("singular matrix");
 		}
 		return score;
 	}
 
 	public static void saveModel(String[] fileNames, String[] params) {
-
-		// Name the text file
+		
+		//Name the text file
 		String saveFileName = "./model.txt/";
-
+		
 		try {
 			PrintWriter outputStream = new PrintWriter(saveFileName);
-
-			// Get the values and the ratings from the given file names and
-			// parameters
+			
+			// Get the values and the ratings from the given file names and parameters
 			ParseJson opJSON = new ParseJson(fileNames, params);
 			double[][] values = opJSON.getValues();
 			double[] ratings = opJSON.getRatings();
-
+	
 			// Run the regression on optimizedSet to get coefficients
 			double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
-
-			for (int i = 0; i < params.length; i++) {
-				// Print to text file
-				outputStream.println(params[i] + " : " + coefficients[i][0]);
-
-				// Print to console
-				System.out.println(params[i] + " : " + coefficients[i][0]);
+			
+			for(int i = 0; i <params.length; i++){				
+				//Print to text file
+				outputStream.println(params[i]+" : "+coefficients[i][0]);
+				
+				//Print to console
+				System.out.println(params[i]+" : "+coefficients[i][0]);
 			}
-
-			// Close text file and create
+			
+			//Close text file and create
 			outputStream.close();
 			System.out.println("text file created in Regression directory");
-
+			
 		} catch (FileNotFoundException e) {
-
+			
 			e.printStackTrace();
 		}
 	}
@@ -203,15 +202,15 @@ public class ModelOptimizer {
 	public static boolean passCorrelationCheck(String param, Model model) {
 		int ind = Arrays.binarySearch(allParams, param);
 		double[] paramVs = new double[allValues[0].length];
-		for (int r = 0; r < allValues[0].length; r++)
+		for(int r = 0; r < allValues[0].length; r++)
 			paramVs[r] = allValues[r][ind];
-		for (String p : model.params) {
+		for(String p: model.params){
 			ind = Arrays.binarySearch(allParams, p);
 			double[] paramT = new double[allValues[0].length];
-			for (int r = 0; r < allValues[0].length; r++)
+			for(int r = 0; r < allValues[0].length; r++)
 				paramT[r] = allValues[r][ind];
-
-			if (Math.abs(calcCorrelation(paramVs, paramT)) >= THRESHOLD)
+			
+			if(Math.abs(calcCorrelation(paramVs, paramT)) >= THRESHOLD)
 				return false;
 		}
 		return true;
