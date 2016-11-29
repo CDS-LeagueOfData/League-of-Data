@@ -378,10 +378,10 @@ public class ParseJson {
 					}
 				}
 				else{
-					value = stat.get(var).getAsInt();
+					value = stat.get(var).getAsDouble();
 				}
+				valueMatrix[gameIndex][varIndex] = value;
 				*/
-				
 				valueMatrix[gameIndex][varIndex] = (double) value;
 			}
 		}
