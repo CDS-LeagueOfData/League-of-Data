@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 public class ModelOptimizer {
 
 	static final double PENALTY = 7.5;
-	static final double THRESHOLD = 0.95;
+	static final double THRESHOLD = 0.90;
 	static String[]   allFiles;
 	static String[]   allParams;
 	static double[][] allValues;
@@ -54,9 +54,9 @@ public class ModelOptimizer {
 			}
 		}
 		
-		
 		allParams = p.toArray(new String[p.size()]);
 		Arrays.sort(allParams);
+		System.out.println("Number of parameters: " + allParams.length);
 
 		allFiles = getFilesFromDir();
 		ParseJson parsey = new ParseJson(allFiles, allParams);
@@ -68,8 +68,8 @@ public class ModelOptimizer {
 		String[] params = new String[opt.params.size()];
 	
 		System.out.println("Saving to file...");
-		saveModel(getFilesFromDir(), opt.params.toArray(params));
 		System.out.println("Score of: " + opt.score);
+		saveModel(getFilesFromDir(), opt.params.toArray(params));
 
 	}
 
@@ -93,8 +93,9 @@ public class ModelOptimizer {
 			available.add(s);
 		
 		//initial model
-		Model bestModel = new Model(new LinkedList<String>());
-		bestModel.params.add(startParam);
+		LinkedList<String> ps = new LinkedList<String>();
+		ps.add(startParam);
+		Model bestModel = new Model(ps);
 		
 		boolean modelChanged = true;
 		while (available.size() != 0 && modelChanged) {
@@ -112,8 +113,6 @@ public class ModelOptimizer {
 						bestP = param;
 						bestUpdated = testModel;
 					}
-				} else {
-					//System.out.println("failed corr check");
 				}
 			}
 
@@ -121,13 +120,9 @@ public class ModelOptimizer {
 			if (status) {
 				bestModel = bestUpdated;
 				modelChanged = true;
-			} else {
-				// bestP = null
-			}
-				
-			
+				System.out.println("  added " + bestP);
+			} 
 		}
-		
 		return bestModel;
 	}
 
