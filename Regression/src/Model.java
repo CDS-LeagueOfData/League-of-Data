@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
 public class Model {
-	ArrayList<String> params;
+	String[] params;
 	double[] coefficients;
 	
-	public Model(ArrayList<String> p, double[] c){
+	public Model(String[] p, double[] c){
 		params = p;
 		coefficients = c;
 	}

@@ -124,7 +124,7 @@ public class MatchCleaner {
 	public static JsonObject getCleanData() {
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
-		apiKey = "RGAPI-9C9A8B11-370F-421A-B2EA-77ADA1E139B2";
+		apiKey = "RGAPI-ccc47046-1fd6-4c5f-90d7-afaa2a45fcf4";
 		System.out.println("Please paste the matchID. You don't need to put the L at the end, just put in pure number: ");
 		matchId = scanner.nextLong();
 		System.out.println("Please paste the summonerID of the player: ");

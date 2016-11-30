@@ -39,6 +39,7 @@ public class ModelOptimizer {
 		public String toString(){
 			String[] ps = new String[params.size()];
 			ps = params.toArray(ps);
+			Arrays.sort(ps);
 			String ret = "";
 			for(String s : ps)
 				ret = s + ", " + ps;
@@ -90,11 +91,6 @@ public class ModelOptimizer {
 		
 		System.out.println(allValues.length +" by " + allValues[0].length);
 		
-		//write values to file for debugging
-		PrintWriter out = new PrintWriter(new FileWriter(new File("values.txt")));
-		for(String s : allParams)
-			out.println(s);
-		out.println();
 		
 		modelHistory = new HashMap<String, Model>();
 		
@@ -102,13 +98,10 @@ public class ModelOptimizer {
 		Model opt = optimize(allParams);
 		
 		String[] params = new String[opt.params.size()];
-	
-		System.out.println("Saving to file...");
 		System.out.println("Score of: " + opt.getScore());
 		System.out.println("# of params used: " + opt.params.size());
-		for(String s : opt.params)
-			out.println(s);
-		out.close();
+	
+		System.out.println("Saving to file...");
 		saveModel(getFilesFromDir(), opt.params.toArray(params));
 
 	}
@@ -124,6 +117,7 @@ public class ModelOptimizer {
 			}
 			System.out.print(".");
 		}		
+		System.out.println("done.");
 		return actualBestModel;
 	}
 	
@@ -223,12 +217,17 @@ public class ModelOptimizer {
 			// Run the regression on optimizedSet to get coefficients
 			double[][] coefficients = LinearRegression.approximateRatingCoef(values, ratings);
 			
+			//number of parameters
+			outputStream.println(coefficients.length);
+			
+			System.out.println("constant: " + coefficients[0][0]);
+			outputStream.println("constant : " +coefficients[0][0]);
 			for(int i = 0; i <params.length; i++){				
 				//Print to text file
-				outputStream.println(params[i]+" : "+coefficients[i][0]);
+				outputStream.println(params[i]+" : "+coefficients[i+1][0]);
 				
 				//Print to console
-				System.out.println(params[i]+" : "+coefficients[i][0]);
+				System.out.println(params[i]+" : "+coefficients[i+1][0]);
 			}
 			
 			//Close text file and create
