@@ -1,8 +1,8 @@
-
-import java.io.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 
 public class ModelOptimizer {
 
-	static final double PENALTY = 2.5;
+	static final double PENALTY = 0.5;
 	static final double THRESHOLD = 0.90;
 	static String[]   allFiles;
 	static String[]   allParams;
@@ -30,9 +30,9 @@ public class ModelOptimizer {
 		}
 
 		public static Model getUpdatedModel(Model m, String p) {
-			Model newM = new Model(m.params);
-			newM.params.add(p);
-			return newM;
+			LinkedList<String> newp = new LinkedList<String>(m.params);
+			newp.add(p);
+			return new Model(newp);
 		}
 	}
 
@@ -40,6 +40,7 @@ public class ModelOptimizer {
 
 		// get all params in String[]
 		JsonObject stats = ParseJson.getStatsFromCleanJson("./data/clean/amber-clean-1.json");
+		//remove stats we don't think belong:
 		stats.remove("item0");
 		stats.remove("item1");
 		stats.remove("item2");
@@ -47,30 +48,44 @@ public class ModelOptimizer {
 		stats.remove("item4");
 		stats.remove("item5");
 		stats.remove("item6");
+		//retrieve all other params out from the file
 		Set<Map.Entry<String, JsonElement>> entries = stats.entrySet();
 		LinkedList<String> p = new LinkedList<String>();
 		for (Map.Entry<String, JsonElement> entry : entries) {
-			if (!(entry.getValue().getAsJsonPrimitive().isBoolean()) && !(entry.getValue().getAsJsonPrimitive().isString())) {
+			//only interested in taking out int values for now
+			if (!(entry.getValue().getAsJsonPrimitive().isBoolean()) && 
+				!(entry.getValue().getAsJsonPrimitive().isString() )) {
 					p.add(entry.getKey());
 			}
 		}
+
+		System.out.println("Penalty  : " + PENALTY);
+		System.out.println("Threshold: " + THRESHOLD);
 		
+		//get all params into an array, allows for easier indexing
 		allParams = p.toArray(new String[p.size()]);
 		Arrays.sort(allParams);
 		System.out.println("Number of parameters: " + allParams.length);
 
+		//get all values from the files for our matrix
 		allFiles = getFilesFromDir();
 		ParseJson parsey = new ParseJson(allFiles, allParams);
 		allValues= parsey.getValues();
 		
+		System.out.println(allValues.length +" by " + allValues[0].length);
+		
+		//write values to file for debugging
 		PrintWriter out = new PrintWriter(new FileWriter(new File("values.txt")));
+		for(String s : allParams)
+			out.println(s);
+		out.println();
+		/*
 		for(int r = 0; r < allValues.length; r++){
 			for(int c = 0; c < allValues[r].length; c++){
 				out.print(allValues[r][c] + "\t");
 			}
 			out.println();
-		}
-		out.close();
+		}*/
 		
 		System.out.println("Optimizing parameters...");
 		Model opt = optimize(allParams);
@@ -80,6 +95,9 @@ public class ModelOptimizer {
 		System.out.println("Saving to file...");
 		System.out.println("Score of: " + opt.score);
 		System.out.println("# of params used: " + opt.params.size());
+		for(String s : opt.params)
+			out.println(s);
+		out.close();
 		saveModel(getFilesFromDir(), opt.params.toArray(params));
 
 	}
@@ -88,7 +106,7 @@ public class ModelOptimizer {
 		Model actualBestModel = new Model(new LinkedList<String>());
 		actualBestModel.score = Double.MAX_VALUE;
 		for( String s : p){
-			System.out.println("NEW MODEL starting with " + s);
+			//System.out.println("NEW MODEL starting with " + s);
 			Model m = optimizeOnParam(p, s);
 			if (m.score < actualBestModel.score) {
 				actualBestModel = m;
@@ -98,41 +116,47 @@ public class ModelOptimizer {
 	}
 	
 	public static Model optimizeOnParam(String[] p, String startParam){
-		// Create set of unused parameters
-		LinkedList<String> available = new LinkedList<String>();
-		for (String s : p)
-			available.add(s);
-		
 		//initial model
 		LinkedList<String> ps = new LinkedList<String>();
 		ps.add(startParam);
 		Model bestModel = new Model(ps);
 		
+		// Create set of unused parameters
+		LinkedList<String> available = new LinkedList<String>();
+		for (String s : p){
+			available.add(s);
+		}
+		//remove starting param
+		available.remove(startParam);
+		
+		//loop while we can and still want to add parameters
 		boolean modelChanged = true;
-		while (available.size() != 0 && modelChanged) {
+		String paramToAdd;
+		Model bestUpdated;
+		while (available.size() >1 && modelChanged) {
+			//reset values
 			modelChanged = false;
-
+			paramToAdd   = null;
+			bestUpdated  = bestModel;
+			
 			// pick next parameter to include
-			String bestP = null;
-			Model bestUpdated = bestModel;
 			for (String param : available) {
 				// has to not show significant correlation
 				if (passCorrelationCheck(param, bestModel)) {
 					Model testModel = Model.getUpdatedModel(bestModel, param);
 					if (testModel.score < bestUpdated.score) {
-						bestP = param;
+						paramToAdd  = param;
 						bestUpdated = testModel;
+						System.out.println("bestUpdated now " + paramToAdd);
 					}
 				} 
 			}
-
-			boolean status = available.remove(bestP);
-			if (status) {
+			if (available.remove(paramToAdd)) {
 				bestModel = bestUpdated;
 				modelChanged = true;
-				System.out.println("  added " + bestP);
+				System.out.println("  added " + paramToAdd);
 			} else {
-				System.out.println("  tried to remove " + bestP);
+				//System.out.println("  tried to remove " + bestP);
 			}
 		}
 		return bestModel;

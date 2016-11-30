@@ -1,7 +1,7 @@
 
-import org.apache.commons.math3.linear.*;
-
-import com.google.gson.JsonObject;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 
 public class LinearRegression {
 
@@ -42,22 +42,33 @@ public class LinearRegression {
 
 	public static void printMatrix(double[][] m) {
 		for (int i = 0; i < m.length; i++) {
-			for (int j = 0; j < m[0].length; i++) {
-				System.out.println(m[i][j] + " ");
+			for (int j = 0; j < m[0].length; j++) {
+				System.out.print(m[i][j] + " ");
 			}
 			System.out.println();
 		}
 	}
 
 	private static double[][] addOne(double[][] values) {
+		double[][] ret = new double[values.length][values[0].length +1];
 		for (int i = 0; i < values.length; i++) {
-			double[] addOne = new double[values[i].length + 1];
-			addOne[0] = 1;
+			ret[i][0] = 1;
 			for (int j = 0; j < values[i].length; j++) {
-				addOne[j + 1] = values[i][j];
+				ret[i][j + 1] = values[i][j];
 			}
-			values[i] = addOne;
 		}
-		return values;
+		return ret;
+	}
+	
+	public static void main(String[] args)
+	{
+		double[][] test = new double[2][2];
+		test[0][0] = 10;
+		test[0][1] = 14;
+		test[1][0] = 20;
+		test[1][1] = 21;
+		
+		double[] rat = {5.0, 10.0};
+		printMatrix(approximateRatingCoef(test, rat));
 	}
 }
