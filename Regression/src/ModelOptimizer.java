@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class ModelOptimizer {
 	static String[]   allFiles;
 	static String[]   allParams;
 	static double[][] allValues;
+	static HashMap<String, Model> modelHistory;
 
 	static class Model {
 		LinkedList<String> params;
@@ -26,7 +28,21 @@ public class ModelOptimizer {
 
 		public Model(LinkedList<String> p) {
 			params = p;
-			score = calculateScore(params);
+			score = -1;
+		}
+		public double getScore(){
+			if (score == -1)
+				score = calculateScore(params);
+			return score;			
+		}
+		
+		public String toString(){
+			String[] ps = new String[params.size()];
+			ps = params.toArray(ps);
+			String ret = "";
+			for(String s : ps)
+				ret = s + ", " + ps;
+			return ret;
 		}
 
 		public static Model getUpdatedModel(Model m, String p) {
@@ -79,13 +95,8 @@ public class ModelOptimizer {
 		for(String s : allParams)
 			out.println(s);
 		out.println();
-		/*
-		for(int r = 0; r < allValues.length; r++){
-			for(int c = 0; c < allValues[r].length; c++){
-				out.print(allValues[r][c] + "\t");
-			}
-			out.println();
-		}*/
+		
+		modelHistory = new HashMap<String, Model>();
 		
 		System.out.println("Optimizing parameters...");
 		Model opt = optimize(allParams);
@@ -93,7 +104,7 @@ public class ModelOptimizer {
 		String[] params = new String[opt.params.size()];
 	
 		System.out.println("Saving to file...");
-		System.out.println("Score of: " + opt.score);
+		System.out.println("Score of: " + opt.getScore());
 		System.out.println("# of params used: " + opt.params.size());
 		for(String s : opt.params)
 			out.println(s);
@@ -108,9 +119,10 @@ public class ModelOptimizer {
 		for( String s : p){
 			//System.out.println("NEW MODEL starting with " + s);
 			Model m = optimizeOnParam(p, s);
-			if (m.score < actualBestModel.score) {
+			if (m.getScore() < actualBestModel.getScore()) {
 				actualBestModel = m;
 			}
+			System.out.print(".");
 		}		
 		return actualBestModel;
 	}
@@ -143,18 +155,29 @@ public class ModelOptimizer {
 			for (String param : available) {
 				// has to not show significant correlation
 				if (passCorrelationCheck(param, bestModel)) {
+					
 					Model testModel = Model.getUpdatedModel(bestModel, param);
-					if (testModel.score < bestUpdated.score) {
+					String key = testModel.toString();
+					
+					// computed the model before, return
+					if (modelHistory.containsKey(key)){
+						System.out.println("previously computed");
+						return modelHistory.get(key);
+					}
+					// add model to history
+					modelHistory.put(key,  testModel);
+					
+					if (testModel.getScore() < bestUpdated.getScore()) {
 						paramToAdd  = param;
 						bestUpdated = testModel;
-						System.out.println("bestUpdated now " + paramToAdd);
+						//System.out.println("bestUpdated now " + paramToAdd);
 					}
 				} 
 			}
 			if (available.remove(paramToAdd)) {
 				bestModel = bestUpdated;
 				modelChanged = true;
-				System.out.println("  added " + paramToAdd);
+				//System.out.println("  added " + paramToAdd);
 			} else {
 				//System.out.println("  tried to remove " + bestP);
 			}
@@ -220,7 +243,6 @@ public class ModelOptimizer {
 
 	public static String[] getFilesFromDir() {
 		File dir = new File("./data/clean/");
-		// Get file names in ./data/clean/
 		File[] files = dir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.toLowerCase().endsWith(".json");
